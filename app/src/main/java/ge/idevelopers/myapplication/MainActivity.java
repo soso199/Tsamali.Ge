@@ -14,7 +14,10 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,7 +25,7 @@ import android.widget.TextView;
 import ge.idevelopers.myapplication.tabs.Blog;
 import ge.idevelopers.myapplication.tabs.Offers;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -46,6 +49,19 @@ public class MainActivity extends AppCompatActivity {
     private Boolean open=true;
     private Typeface typeface;
     private TabLayout tabLayout;
+    private Animation fadein;
+    private Animation rotateback;
+    private Animation rotatetwoback;
+    private Animation test;
+    Animation animation_first;
+    Animation animation_two;
+    boolean isShow = false;
+    private LinearLayout humburger_11;
+    private LinearLayout humburger_21;
+    private LinearLayout humburger_31;
+    private LinearLayout humburger_41;
+    private RelativeLayout hamburger_main;
+    public static boolean isSlidable=true;
 
 
     @Override
@@ -69,7 +85,30 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-        tabLayout.setTabTextColors(R.color.colorPrimaryDark,R.color.colorPrimaryDark);
+        tabLayout.setTabTextColors(R.color.black,R.color.black);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()){
+                    case 0:
+                        isSlidable=true;
+                    break;
+                    case 1:
+                        isSlidable=false;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
 
         appImage = (ImageView) findViewById(android.R.id.home);
         TitleText = (TextView) findViewById(android.R.id.title);
@@ -77,6 +116,64 @@ public class MainActivity extends AppCompatActivity {
         mSlidingPanel = (SlidingPaneLayout) findViewById(R.id.main_content);
         mSlidingPanel.setPanelSlideListener(mPanelListener);
         mSlidingPanel.setParallaxDistance(180);
+        mSlidingPanel.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this){
+            @Override
+            public void onSwipeLeft() {
+                if(isSlidable)
+                    mSlidingPanel.openPane();
+                else
+                super.onSwipeLeft();
+            }
+
+            @Override
+            public void onSwipeRight() {
+                if(isSlidable)
+                    mSlidingPanel.openPane();
+                else
+                super.onSwipeRight();
+            }
+        });
+
+
+        //animation
+
+        humburger_11 = (LinearLayout) findViewById(R.id.humburger_14);
+        humburger_21 = (LinearLayout) findViewById(R.id.humburger_24);
+        humburger_31 = (LinearLayout) findViewById(R.id.humburger_34);
+        humburger_41 = (LinearLayout) findViewById(R.id.humburger_44);
+        hamburger_main=(RelativeLayout)findViewById(R.id.humburger_main4);
+
+        test = AnimationUtils.loadAnimation(this, R.anim.test);
+        animation_first = AnimationUtils.loadAnimation(this, R.anim.rotate);
+        animation_two = AnimationUtils.loadAnimation(this, R.anim.rotatetwo);
+        fadein = AnimationUtils.loadAnimation(this, R.anim.fadein);
+        rotateback = AnimationUtils.loadAnimation(this, R.anim.rotateback);
+        rotatetwoback = AnimationUtils.loadAnimation(this, R.anim.rotatetwoback);
+
+        hamburger_main.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(open) {
+                    humburger_41.startAnimation(test);
+                    humburger_31.startAnimation(test);
+                    humburger_11.startAnimation(animation_first);
+                    humburger_21.startAnimation(animation_two);
+
+                    mSlidingPanel.openPane();
+                    open=false;
+                }
+                else {
+                    humburger_41.startAnimation(fadein);
+                    humburger_31.startAnimation(fadein);
+                    humburger_11.startAnimation(rotateback);
+                    humburger_21.startAnimation(rotatetwoback);
+
+                    mSlidingPanel.closePane();
+                    open=true;
+                }
+            }
+        });
+
 
 
         changeTabsFont();
@@ -95,11 +192,20 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onPanelOpened(View panel) {
 
+            LinearLayout tabStrip = ((LinearLayout)tabLayout.getChildAt(0));
+            tabStrip.setEnabled(false);
+            for(int i = 0; i < tabStrip.getChildCount(); i++) {
+                tabStrip.getChildAt(i).setClickable(false);
+            }
         }
 
         @Override
         public void onPanelClosed(View panel) {
-
+            LinearLayout tabStrip = ((LinearLayout)tabLayout.getChildAt(0));
+            tabStrip.setEnabled(true);
+            for(int i = 0; i < tabStrip.getChildCount(); i++) {
+                tabStrip.getChildAt(i).setClickable(true);
+            }
         }
     };
 
@@ -107,34 +213,12 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // TODO Auto-generated method stub
         switch (item.getItemId()) {
-            case android.R.id.home:
-                if (mSlidingPanel.isOpen()) {
-                    appImage.animate().rotation(0);
-                    mSlidingPanel.closePane();
-                    getActionBar().setTitle(getString(R.string.app_name));
-                } else {
-                    appImage.animate().rotation(90);
-                    mSlidingPanel.openPane();
-                    getActionBar().setTitle("Menu Titles");
-                }
-                break;
-            default:
-                break;
+
+
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void openOrClosePanel(View v)
-    {
-        if(open) {
-            mSlidingPanel.openPane();
-            open=false;
-        }
-        else {
-            mSlidingPanel.closePane();
-            open=true;
-        }
-    }
 
 
 
@@ -194,9 +278,12 @@ public class MainActivity extends AppCompatActivity {
                 View tabViewChild = vgTab.getChildAt(i);
                 if (tabViewChild instanceof TextView) {
                     ((TextView) tabViewChild).setTypeface(typeface);
-                    ((TextView) tabViewChild).setTextSize(50f);
                 }
             }
         }
+    }
+   public void onClick(View v)
+    {
+
     }
 }

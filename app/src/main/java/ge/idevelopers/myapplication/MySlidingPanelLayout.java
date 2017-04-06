@@ -31,16 +31,14 @@ public class MySlidingPanelLayout  extends SlidingPaneLayout {
 // ===========================================================
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return false;
+
+            return false;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (this.isOpen()) {
-            this.closePane();
-        }
-        return false; // here it returns false so that another event's listener
-        // should be called, in your case the MapFragment
-        // listener
+
+        return  true;
     }
+
 }
