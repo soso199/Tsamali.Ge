@@ -3,7 +3,7 @@ package ge.idevelopers.myapplication;
 /**
  * Created by soso on 4/6/17.
  */
-import android.content.Context;
+
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
@@ -12,25 +12,27 @@ import android.view.View.OnTouchListener;
 
 public class OnSwipeTouchListener implements OnTouchListener {
 
-    private final GestureDetector gestureDetector;
+    private final GestureDetector gestureDetector = new GestureDetector(new GestureListener());
 
-    public OnSwipeTouchListener (Context ctx){
-        gestureDetector = new GestureDetector(ctx, new GestureListener());
-    }
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
+    public boolean onTouch(final View v, final MotionEvent event) {
         return gestureDetector.onTouchEvent(event);
     }
+
 
     private final class GestureListener extends SimpleOnGestureListener {
 
         private static final int SWIPE_THRESHOLD = 100;
-        private static final int SWIPE_VELOCITY_THRESHOLD = 100;
+        private static final int SWIPE_VELOCITY_THRESHOLD = 10;
 
         @Override
         public boolean onDown(MotionEvent e) {
             return true;
+        }
+
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            onScrollView( e1,  e2, distanceX,  distanceY);
+            return super.onScroll(e1, e2, distanceX, distanceY);
         }
 
         @Override
@@ -46,8 +48,8 @@ public class OnSwipeTouchListener implements OnTouchListener {
                         } else {
                             onSwipeLeft();
                         }
-                        result = true;
                     }
+                    result = true;
                 }
                 else if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
                     if (diffY > 0) {
@@ -55,8 +57,9 @@ public class OnSwipeTouchListener implements OnTouchListener {
                     } else {
                         onSwipeTop();
                     }
-                    result = true;
                 }
+                result = true;
+
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
@@ -75,5 +78,7 @@ public class OnSwipeTouchListener implements OnTouchListener {
 
     public void onSwipeBottom() {
     }
-}
 
+    public void onScrollView(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+    }
+}

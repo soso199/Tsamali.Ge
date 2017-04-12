@@ -1,7 +1,11 @@
 package ge.idevelopers.myapplication;
 
+import android.app.DownloadManager;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.v4.widget.SlidingPaneLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +25,31 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.facebook.FacebookSdk;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import ge.idevelopers.myapplication.models.BlogsModel;
 import ge.idevelopers.myapplication.tabs.Blog;
 import ge.idevelopers.myapplication.tabs.Offers;
 
@@ -45,7 +73,10 @@ public class MainActivity extends AppCompatActivity{
     ListView mMenuList;
     ImageView appImage;
     private TextView TitleText;
-    private RelativeLayout cover;
+    private TextView blog;
+    private TextView aqciebi;
+    private TextView contact;
+    private TextView settings;
     private Boolean open=true;
     private Typeface typeface;
     private TabLayout tabLayout;
@@ -61,6 +92,9 @@ public class MainActivity extends AppCompatActivity{
     private LinearLayout humburger_31;
     private LinearLayout humburger_41;
     private RelativeLayout hamburger_main;
+    private RelativeLayout all;
+    private RelativeLayout cover;
+    public  List<BlogsModel> blogsList;
     public static boolean isSlidable=true;
 
 
@@ -69,18 +103,28 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-       // setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
+        blog=(TextView)findViewById(R.id.blog_text);
+        aqciebi=(TextView)findViewById(R.id.aqciebi_text);
+        contact=(TextView)findViewById(R.id.contact_text);
+        settings=(TextView)findViewById(R.id.settings_text);
+
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         typeface=Typeface.createFromAsset(getAssets(), "fonts/alkroundedmtav-medium.otf");
+
+        blog.setTypeface(typeface);
+        aqciebi.setTypeface(typeface);
+        contact.setTypeface(typeface);
+        settings.setTypeface(typeface);
+
+
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         Color color=new Color();
         color.parseColor("#000000");
+
+
 
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -113,26 +157,26 @@ public class MainActivity extends AppCompatActivity{
         appImage = (ImageView) findViewById(android.R.id.home);
         TitleText = (TextView) findViewById(android.R.id.title);
 
+        all=(RelativeLayout)findViewById(R.id.all);
         mSlidingPanel = (SlidingPaneLayout) findViewById(R.id.main_content);
-        mSlidingPanel.setPanelSlideListener(mPanelListener);
+       mSlidingPanel.setPanelSlideListener(mPanelListener);
         mSlidingPanel.setParallaxDistance(180);
-        mSlidingPanel.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this){
+
+        all.setOnTouchListener(new OnSwipeTouchListener(){
             @Override
-            public void onSwipeLeft() {
-                if(isSlidable)
-                    mSlidingPanel.openPane();
-                else
-                super.onSwipeLeft();
+            public void onSwipeRight() {
+                mSlidingPanel.openPane();
+                super.onSwipeRight();
             }
 
             @Override
-            public void onSwipeRight() {
-                if(isSlidable)
-                    mSlidingPanel.openPane();
-                else
-                super.onSwipeRight();
+            public void onSwipeLeft() {
+                super.onSwipeLeft();
             }
-        });
+        }
+        );
+
+
 
 
         //animation
@@ -142,6 +186,7 @@ public class MainActivity extends AppCompatActivity{
         humburger_31 = (LinearLayout) findViewById(R.id.humburger_34);
         humburger_41 = (LinearLayout) findViewById(R.id.humburger_44);
         hamburger_main=(RelativeLayout)findViewById(R.id.humburger_main4);
+        cover=(RelativeLayout)findViewById(R.id.cover);
 
         test = AnimationUtils.loadAnimation(this, R.anim.test);
         animation_first = AnimationUtils.loadAnimation(this, R.anim.rotate);
@@ -160,6 +205,7 @@ public class MainActivity extends AppCompatActivity{
                     humburger_21.startAnimation(animation_two);
 
                     mSlidingPanel.openPane();
+                    cover.setVisibility(View.VISIBLE);
                     open=false;
                 }
                 else {
@@ -169,10 +215,12 @@ public class MainActivity extends AppCompatActivity{
                     humburger_21.startAnimation(rotatetwoback);
 
                     mSlidingPanel.closePane();
+                    cover.setVisibility(View.GONE);
                     open=true;
                 }
             }
         });
+
 
 
 
@@ -197,6 +245,11 @@ public class MainActivity extends AppCompatActivity{
             for(int i = 0; i < tabStrip.getChildCount(); i++) {
                 tabStrip.getChildAt(i).setClickable(false);
             }
+            mViewPager.setActivated(false);
+            mViewPager.setClickable(false);
+            mViewPager.setEnabled(false);
+
+
         }
 
         @Override
@@ -238,8 +291,16 @@ public class MainActivity extends AppCompatActivity{
             switch (position)
             {
                 case 0:
-                    Blog blog =new Blog();
+                     Blog blog =new Blog();
+//                    Bundle bundle=new Bundle();
+//                   bundle.putSerializable("lstBlogs", (Serializable) blogsList);
+//                    blog.setArguments(bundle);
+//                    return blog;
+
+
                     return blog;
+
+
                 case 1:
                     Offers offers =new Offers();
                     return offers;
@@ -285,5 +346,45 @@ public class MainActivity extends AppCompatActivity{
    public void onClick(View v)
     {
 
+
     }
+    ///sending mail
+    public void sendMail(View v)
+    {
+        Intent i = new Intent(Intent.ACTION_SENDTO);
+        i.setType("message/rfc822");
+        i.setData(Uri.parse("mailto:"));
+        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"tukhashvilisoso@gmail.com"});
+        i.putExtra(Intent.EXTRA_SUBJECT, "testing mail");
+        i.putExtra(Intent.EXTRA_TEXT   , "body of email");
+        try {
+            startActivity(Intent.createChooser(i, "Send mail..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(v.getContext(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    ////*****Shearing to facebook****\\\\\\\\\\\\\
+    public void fbShare(View v)
+    {
+
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+
+        ShareLinkContent linkContent;
+
+        ShareDialog shareDialog = new ShareDialog(this);
+        if (ShareDialog.canShow(ShareLinkContent.class)) {
+            linkContent = new ShareLinkContent.Builder()
+                    .setContentUrl(Uri.parse("http://tsamali.ge/aqcia/sarelaqsacio-samkurnalo-an-sxeulis-sakoreqcio-masazhi"))
+                    .build();
+
+            shareDialog.show(linkContent);
+        }
+
+
+    }
+
+
+
 }

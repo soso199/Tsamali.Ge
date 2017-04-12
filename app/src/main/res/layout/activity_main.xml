@@ -10,15 +10,145 @@
 
     <LinearLayout
         android:id="@+id/slideMenu"
-        android:layout_width="130dp"
+        android:layout_width="160dp"
         android:layout_height="match_parent"
         android:background="@color/colorPrimary"
-        android:orientation="vertical"
-        android:padding="20dp"
         android:onClick="onClick"
-        android:weightSum="5"></LinearLayout>
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:weightSum="8">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.2"
+                    android:src="@drawable/blog"
+                    android:id="@+id/blog_image"/>
+
+                <TextView
+                    android:id="@+id/blog_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.8"
+                    android:paddingLeft="5dp"
+                    android:text="ბლოგი"
+                    android:textColor="#737272" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.2"
+                    android:id="@+id/aqciebi_image"
+                    android:src="@drawable/percentage"/>
+
+                <TextView
+                    android:id="@+id/aqciebi_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.8"
+                    android:text="აქციები"
+                    android:paddingLeft="5dp"
+                    android:textColor="#737272" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.2"
+                    android:id="@+id/contact_image"
+                    android:src="@drawable/information"/>
+
+                <TextView
+                    android:id="@+id/contact_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.8"
+                    android:text="კონტაქტი"
+                    android:paddingLeft="5dp"
+                    android:textColor="#737272" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.2"
+                    android:id="@+id/settings_image"
+                    android:src="@drawable/settings"/>
+
+                <TextView
+                    android:id="@+id/settings_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.8"
+                    android:text="პარამეტრები"
+                    android:paddingLeft="5dp"
+                    android:textColor="#737272" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+    </LinearLayout>
 
     <RelativeLayout
+        android:id="@+id/all"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -44,20 +174,19 @@
                     android:weightSum="1">
 
                     <RelativeLayout
+                        android:id="@+id/humburger_main4"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:id="@+id/humburger_main4"
                         android:layout_weight="0.2"
 
-                        android:gravity="center_vertical"
-                        >
+                        android:gravity="center_vertical">
 
                         <LinearLayout
-                        android:id="@+id/humburger_34"
-                        android:layout_width="30dp"
-                        android:layout_height="3dp"
-                        android:background="@color/colorAccent"
-                        android:orientation="horizontal" />
+                            android:id="@+id/humburger_34"
+                            android:layout_width="30dp"
+                            android:layout_height="3dp"
+                            android:background="@color/colorAccent"
+                            android:orientation="horizontal" />
 
 
                         <LinearLayout
@@ -90,20 +219,18 @@
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@color/colorAccent"
-                            />
+                            android:background="@color/colorAccent" />
                     </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.8">
+                        android:layout_weight="0.6">
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/tsamali_logo"
-                            />
+                            android:src="@drawable/tsamali_logo" />
                     </RelativeLayout>
                 </LinearLayout>
             </android.support.v7.widget.Toolbar>
@@ -112,7 +239,9 @@
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:tabTextAppearance="@style/MyTabLayoutTextAppearance"/>
+                app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
+                android:background="#ffffff"
+                />
 
         </android.support.design.widget.AppBarLayout>
 
@@ -122,6 +251,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/appbar"
+            android:background="#ffffff"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/cover"
+            android:onClick="onClick"
+            android:layout_below="@+id/appbar"
+            android:visibility="invisible"
+            ></RelativeLayout>
+
     </RelativeLayout>
 </ge.idevelopers.myapplication.MySlidingPanelLayout>
