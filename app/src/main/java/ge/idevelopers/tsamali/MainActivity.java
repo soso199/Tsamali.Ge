@@ -274,11 +274,6 @@ public class MainActivity extends AppCompatActivity{
             {
                 case 0:
                      Blog blog =new Blog();
-//                    Bundle bundle=new Bundle();
-//                   bundle.putSerializable("lstBlogs", (Serializable) blogsList);
-//                    blog.setArguments(bundle);
-//                    return blog;
-
 
                     return blog;
 

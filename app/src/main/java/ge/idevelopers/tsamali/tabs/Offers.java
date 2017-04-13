@@ -53,9 +53,7 @@ public class Offers extends Fragment {
 
         final String url="http://tsamali.ge/api/action";
 
-        ProgressDialog progress = null;
-        ProgressDialog finalProgress = progress;
-        final ProgressDialog finalProgress1 = finalProgress;
+        final ProgressDialog progress=new ProgressDialog(getActivity());;
         JsonObjectRequest getOffers=new JsonObjectRequest(
                 Request.Method.GET,
                 url,
@@ -89,10 +87,11 @@ public class Offers extends Fragment {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            offersAdapter.notifyDataSetChanged();
-                        }
 
-                        //  finalProgress1.cancel();
+                        }
+                        offersAdapter.notifyDataSetChanged();
+
+                        progress.cancel();
 
 
                     }
@@ -110,9 +109,9 @@ public class Offers extends Fragment {
         queue.add(getOffers);
 
 
-
         offersAdapter.notifyDataSetChanged();
-
+        progress.setCanceledOnTouchOutside(false);
+        progress.show();
         return rootView;
     }
 }

@@ -16,6 +16,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import ge.idevelopers.tsamali.BlogDetailsActivity;
+import ge.idevelopers.tsamali.OffersDetails;
 import ge.idevelopers.tsamali.R;
 import ge.idevelopers.tsamali.models.OffersModel;
 
@@ -61,7 +62,7 @@ public class OffersAdapter extends  RecyclerView.Adapter<OffersAdapter.ViewHolde
         holder.offers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(context, BlogDetailsActivity.class);
+                Intent intent=new Intent(context, OffersDetails.class);
                 intent.putExtra("title",title);
                 intent.putExtra("url",url);
                 intent.putExtra("text",text);

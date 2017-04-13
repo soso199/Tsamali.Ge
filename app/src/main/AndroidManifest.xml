@@ -44,8 +44,15 @@
         <activity
             android:name="ge.idevelopers.tsamali.BlogDetailsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name="ge.idevelopers.tsamali.OffersDetails"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+
+        <activity android:name="ge.idevelopers.tsamali.OffersDetails"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
     </application>
 
 </manifest>

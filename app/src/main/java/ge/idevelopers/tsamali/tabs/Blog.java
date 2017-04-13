@@ -53,10 +53,8 @@ public class Blog extends Fragment {
 
            final String url="http://tsamali.ge/api/blog";
 
-            ProgressDialog progress = null;
-            ProgressDialog finalProgress = progress;
-            final ProgressDialog finalProgress1 = finalProgress;
-            JsonObjectRequest getBlogs=new JsonObjectRequest(
+        final ProgressDialog progress=new ProgressDialog(getActivity());
+        JsonObjectRequest getBlogs=new JsonObjectRequest(
                     Request.Method.GET,
                     url,
                     "",
@@ -89,14 +87,15 @@ public class Blog extends Fragment {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-
                             }
                             Collections.reverse(blogsList);
                             blogsAdapter.notifyDataSetChanged();
-                            //  finalProgress1.cancel();
+                             progress.cancel();
+
 
 
                         }
+
 
                     },
                     new Response.ErrorListener() {
@@ -104,13 +103,16 @@ public class Blog extends Fragment {
                         public void onErrorResponse(VolleyError error) {
 
                         }
+
                     }
+
             );
 
             RequestQueue queue= Volley.newRequestQueue(getActivity().getApplicationContext());
             queue.add(getBlogs);
 
-
+        progress.setCanceledOnTouchOutside(false);
+        progress.show();
 
         blogsAdapter.notifyDataSetChanged();
 
