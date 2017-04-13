@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity{
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-        tabLayout.setTabTextColors(R.color.black,R.color.black);
+       // tabLayout.setTabTextColors(R.color.black,R.color.black);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

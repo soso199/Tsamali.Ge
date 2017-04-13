@@ -31,11 +31,11 @@
                 android:weightSum="1">
 
                 <ImageView
+                    android:id="@+id/blog_image"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.2"
-                    android:src="@drawable/blog"
-                    android:id="@+id/blog_image"/>
+                    android:src="@drawable/blog" />
 
                 <TextView
                     android:id="@+id/blog_text"
@@ -44,7 +44,8 @@
                     android:layout_weight="0.8"
                     android:paddingLeft="5dp"
                     android:text="ბლოგი"
-                    android:textColor="#737272" />
+                    android:textColor="#000"
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
@@ -63,20 +64,21 @@
                 android:weightSum="1">
 
                 <ImageView
+                    android:id="@+id/aqciebi_image"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.2"
-                    android:id="@+id/aqciebi_image"
-                    android:src="@drawable/percentage"/>
+                    android:src="@drawable/percentage" />
 
                 <TextView
                     android:id="@+id/aqciebi_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.8"
-                    android:text="აქციები"
                     android:paddingLeft="5dp"
-                    android:textColor="#737272" />
+                    android:text="აქციები"
+                    android:textColor="#000"
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
@@ -95,20 +97,21 @@
                 android:weightSum="1">
 
                 <ImageView
+                    android:id="@+id/contact_image"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.2"
-                    android:id="@+id/contact_image"
-                    android:src="@drawable/information"/>
+                    android:src="@drawable/information" />
 
                 <TextView
                     android:id="@+id/contact_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.8"
-                    android:text="კონტაქტი"
                     android:paddingLeft="5dp"
-                    android:textColor="#737272" />
+                    android:text="კონტაქტი"
+                    android:textColor="#000"
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
@@ -127,20 +130,21 @@
                 android:weightSum="1">
 
                 <ImageView
+                    android:id="@+id/settings_image"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.2"
-                    android:id="@+id/settings_image"
-                    android:src="@drawable/settings"/>
+                    android:src="@drawable/settings" />
 
                 <TextView
                     android:id="@+id/settings_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.8"
-                    android:text="პარამეტრები"
                     android:paddingLeft="5dp"
-                    android:textColor="#737272" />
+                    android:text="პარამეტრები"
+                    android:textColor="#000"
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
@@ -239,8 +243,11 @@
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
                 android:background="#ffffff"
+                app:tabSelectedTextColor="@color/black"
+                app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
+                app:tabTextColor="@color/black"
+
                 />
 
         </android.support.design.widget.AppBarLayout>
@@ -252,16 +259,16 @@
             android:layout_height="match_parent"
             android:layout_below="@id/appbar"
             android:background="#ffffff"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:theme="@style/MyViewPagerTextAppearance" />
 
         <RelativeLayout
+            android:id="@+id/cover"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/cover"
-            android:onClick="onClick"
             android:layout_below="@+id/appbar"
-            android:visibility="invisible"
-            ></RelativeLayout>
+            android:onClick="onClick"
+            android:visibility="invisible"></RelativeLayout>
 
     </RelativeLayout>
 </ge.idevelopers.myapplication.MySlidingPanelLayout>

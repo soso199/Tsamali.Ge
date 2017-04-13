@@ -25,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -91,9 +92,10 @@ public class Blog extends Fragment {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-                                blogsAdapter.notifyDataSetChanged();
-                            }
 
+                            }
+                            Collections.reverse(blogsList);
+                            blogsAdapter.notifyDataSetChanged();
                             //  finalProgress1.cancel();
 
 

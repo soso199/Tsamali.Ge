@@ -2,30 +2,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="200dp"
+    android:id="@+id/offers"
     android:orientation="vertical"
 
->
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="5dp"
         android:paddingRight="5dp">
+
         <ImageView
             android:id="@+id/image_offers"
             android:layout_width="match_parent"
             android:layout_height="180dp" />
     </RelativeLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="5dp"
         android:paddingRight="5dp">
+
         <TextView
             android:id="@+id/text_offers"
             android:layout_width="match_parent"
+            android:layout_height="20dp"
             android:gravity="center"
-            android:layout_height="20dp" />
+            android:textColor="@color/black" />
     </RelativeLayout>
 
 </LinearLayout>
