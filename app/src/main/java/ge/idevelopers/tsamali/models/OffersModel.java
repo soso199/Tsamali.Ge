@@ -1,18 +1,16 @@
-package ge.idevelopers.myapplication.models;
-
-import java.io.Serializable;
+package ge.idevelopers.tsamali.models;
 
 /**
  * Created by soso on 4/5/17.
  */
 
-public class BlogsModel{
+public class OffersModel {
     private String title;
     private String img;
     private String text;
     private int views;
 
-    public BlogsModel(String title, String img, String text, int views) {
+    public OffersModel(String title, String img, String text, int views) {
         this.title = title;
         this.img = img;
         this.text = text;

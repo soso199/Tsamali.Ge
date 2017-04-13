@@ -1,9 +1,7 @@
-package ge.idevelopers.myapplication.adapters;
+package ge.idevelopers.tsamali.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,62 +13,52 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
-import ge.idevelopers.myapplication.BlogDetailsActivity;
-import ge.idevelopers.myapplication.R;
-import ge.idevelopers.myapplication.models.BlogsModel;
+import ge.idevelopers.tsamali.BlogDetailsActivity;
+import ge.idevelopers.tsamali.R;
+import ge.idevelopers.tsamali.models.OffersModel;
 
 /**
  * Created by soso on 4/5/17.
  */
 
-public class BlogsAdapter extends  RecyclerView.Adapter<BlogsAdapter.ViewHolder> {
+public class OffersAdapter extends  RecyclerView.Adapter<OffersAdapter.ViewHolder> {
 
     Context context;
-    private List<BlogsModel> blogItems;
+    private List<OffersModel> offerItems;
 
 
 
 
     @Override
     public  ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.blogs_adapter, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.offers_adapter, parent, false);
 
 
         return new ViewHolder(view);
     }
 
-    public BlogsAdapter(List<BlogsModel> items, Context context) {
-        this.blogItems = items;
+    public OffersAdapter(List<OffersModel> items, Context context) {
+        this.offerItems = items;
         this.context = context;
     }
 
 
     @Override
-    public void onBindViewHolder(BlogsAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(OffersAdapter.ViewHolder holder, int position) {
 
-        BlogsModel model = blogItems.get(position);
+       OffersModel model = offerItems.get(position);
         final String title=model.getTitle();
         final String text=model.getText();
-        int seens=model.getViews();
         final String url="http://tsamali.ge/"+model.getImg();
-
         holder.text.setText(title);
-        holder.seens.setText(Integer.toString(seens));
-
         Typeface typeface= Typeface.createFromAsset(context.getAssets(), "fonts/alkroundedmtav-medium.otf");
         holder.text.setTypeface(typeface);
-        Picasso.with(context).load(url).resize(500,300).into(holder.image);
 
-        holder.blog.setOnClickListener(new View.OnClickListener() {
+        Picasso.with(context).load("http://tsamali.ge/"+model.getImg()).into(holder.image);
+
+        holder.offers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(context, BlogDetailsActivity.class);
@@ -85,25 +73,23 @@ public class BlogsAdapter extends  RecyclerView.Adapter<BlogsAdapter.ViewHolder>
 
     @Override
     public int getItemCount() {
-        return blogItems.size();
+        return offerItems.size();
     }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView text;
-        TextView seens;
         ImageView image;
-        LinearLayout blog;
+        LinearLayout offers;
 
         // ImageView image_background;
         public ViewHolder(final View itemView) {
             super(itemView);
 
-            text = (TextView) itemView.findViewById(R.id.text);
-            seens=(TextView) itemView.findViewById(R.id.seens);
-            image = (ImageView) itemView.findViewById(R.id.image);
-            blog=(LinearLayout) itemView.findViewById(R.id.blog);
+            image = (ImageView) itemView.findViewById(R.id.image_offers);
+            text = (TextView) itemView.findViewById(R.id.text_offers);
+            offers=(LinearLayout) itemView.findViewById(R.id.offers);
 
         }
     }

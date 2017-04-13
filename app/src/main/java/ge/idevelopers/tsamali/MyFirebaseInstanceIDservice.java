@@ -1,4 +1,4 @@
-package ge.idevelopers.myapplication;
+package ge.idevelopers.tsamali;
 
 import android.util.Log;
 

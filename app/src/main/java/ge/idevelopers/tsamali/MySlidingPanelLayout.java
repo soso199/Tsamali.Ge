@@ -1,4 +1,4 @@
-package ge.idevelopers.myapplication;
+package ge.idevelopers.tsamali;
 
 import android.content.Context;
 import android.support.v4.widget.SlidingPaneLayout;

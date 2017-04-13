@@ -1,8 +1,7 @@
-package ge.idevelopers.myapplication.adapters;
+package ge.idevelopers.tsamali.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,55 +13,55 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
-import ge.idevelopers.myapplication.BlogDetailsActivity;
-import ge.idevelopers.myapplication.R;
-import ge.idevelopers.myapplication.models.BlogsModel;
-import ge.idevelopers.myapplication.models.OffersModel;
+import ge.idevelopers.tsamali.BlogDetailsActivity;
+import ge.idevelopers.tsamali.R;
+import ge.idevelopers.tsamali.models.BlogsModel;
 
 /**
  * Created by soso on 4/5/17.
  */
 
-public class OffersAdapter extends  RecyclerView.Adapter<OffersAdapter.ViewHolder> {
+public class BlogsAdapter extends  RecyclerView.Adapter<BlogsAdapter.ViewHolder> {
 
     Context context;
-    private List<OffersModel> offerItems;
+    private List<BlogsModel> blogItems;
 
 
 
 
     @Override
     public  ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.offers_adapter, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.blogs_adapter, parent, false);
 
 
         return new ViewHolder(view);
     }
 
-    public OffersAdapter(List<OffersModel> items, Context context) {
-        this.offerItems = items;
+    public BlogsAdapter(List<BlogsModel> items, Context context) {
+        this.blogItems = items;
         this.context = context;
     }
 
 
     @Override
-    public void onBindViewHolder(OffersAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(BlogsAdapter.ViewHolder holder, int position) {
 
-       OffersModel model = offerItems.get(position);
+        BlogsModel model = blogItems.get(position);
         final String title=model.getTitle();
         final String text=model.getText();
+        int seens=model.getViews();
         final String url="http://tsamali.ge/"+model.getImg();
+
         holder.text.setText(title);
+        holder.seens.setText(Integer.toString(seens));
+
         Typeface typeface= Typeface.createFromAsset(context.getAssets(), "fonts/alkroundedmtav-medium.otf");
         holder.text.setTypeface(typeface);
+        Picasso.with(context).load(url).resize(500,300).into(holder.image);
 
-        Picasso.with(context).load("http://tsamali.ge/"+model.getImg()).into(holder.image);
-
-        holder.offers.setOnClickListener(new View.OnClickListener() {
+        holder.blog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(context, BlogDetailsActivity.class);
@@ -77,23 +76,25 @@ public class OffersAdapter extends  RecyclerView.Adapter<OffersAdapter.ViewHolde
 
     @Override
     public int getItemCount() {
-        return offerItems.size();
+        return blogItems.size();
     }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView text;
+        TextView seens;
         ImageView image;
-        LinearLayout offers;
+        LinearLayout blog;
 
         // ImageView image_background;
         public ViewHolder(final View itemView) {
             super(itemView);
 
-            image = (ImageView) itemView.findViewById(R.id.image_offers);
-            text = (TextView) itemView.findViewById(R.id.text_offers);
-            offers=(LinearLayout) itemView.findViewById(R.id.offers);
+            text = (TextView) itemView.findViewById(R.id.text);
+            seens=(TextView) itemView.findViewById(R.id.seens);
+            image = (ImageView) itemView.findViewById(R.id.image);
+            blog=(LinearLayout) itemView.findViewById(R.id.blog);
 
         }
     }

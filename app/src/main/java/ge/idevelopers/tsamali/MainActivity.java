@@ -1,7 +1,5 @@
-package ge.idevelopers.myapplication;
+package ge.idevelopers.tsamali;
 
-import android.app.DownloadManager;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -27,31 +25,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.facebook.FacebookSdk;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.File;
-import java.io.Serializable;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
-import ge.idevelopers.myapplication.models.BlogsModel;
-import ge.idevelopers.myapplication.tabs.Blog;
-import ge.idevelopers.myapplication.tabs.Offers;
+import ge.idevelopers.tsamali.models.BlogsModel;
+import ge.idevelopers.tsamali.tabs.Blog;
+import ge.idevelopers.tsamali.tabs.Offers;
 
 public class MainActivity extends AppCompatActivity{
 

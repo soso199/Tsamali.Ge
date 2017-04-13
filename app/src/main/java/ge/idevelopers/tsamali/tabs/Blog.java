@@ -1,4 +1,4 @@
-package ge.idevelopers.myapplication.tabs;
+package ge.idevelopers.tsamali.tabs;
 
 /**
  * Created by soso on 4/5/17.
@@ -26,14 +26,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
-import ge.idevelopers.myapplication.R;
-import ge.idevelopers.myapplication.SplashScreen;
-import ge.idevelopers.myapplication.adapters.BlogsAdapter;
-import ge.idevelopers.myapplication.models.BlogsModel;
-import ge.idevelopers.myapplication.MainActivity;
+import ge.idevelopers.tsamali.R;
+import ge.idevelopers.tsamali.adapters.BlogsAdapter;
+import ge.idevelopers.tsamali.models.BlogsModel;
 
 public class Blog extends Fragment {
 

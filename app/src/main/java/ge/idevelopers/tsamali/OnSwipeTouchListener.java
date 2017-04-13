@@ -1,4 +1,4 @@
-package ge.idevelopers.myapplication;
+package ge.idevelopers.tsamali;
 
 /**
  * Created by soso on 4/6/17.

@@ -1,4 +1,4 @@
-package ge.idevelopers.myapplication.tabs;
+package ge.idevelopers.tsamali.tabs;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -23,10 +23,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import ge.idevelopers.myapplication.R;
-import ge.idevelopers.myapplication.adapters.OffersAdapter;
-import ge.idevelopers.myapplication.models.BlogsModel;
-import ge.idevelopers.myapplication.models.OffersModel;
+import ge.idevelopers.tsamali.R;
+import ge.idevelopers.tsamali.adapters.OffersAdapter;
+import ge.idevelopers.tsamali.models.OffersModel;
 
 /**
  * Created by soso on 4/5/17.

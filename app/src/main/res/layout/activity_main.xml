@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ge.idevelopers.myapplication.MySlidingPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ge.idevelopers.tsamali.MySlidingPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layoutDirection="ltr"
-    tools:context="ge.idevelopers.myapplication.MainActivity">
+    tools:context="ge.idevelopers.tsamali.MainActivity">
 
     <LinearLayout
         android:id="@+id/slideMenu"
@@ -271,4 +271,4 @@
             android:visibility="invisible"></RelativeLayout>
 
     </RelativeLayout>
-</ge.idevelopers.myapplication.MySlidingPanelLayout>
+</ge.idevelopers.tsamali.MySlidingPanelLayout>

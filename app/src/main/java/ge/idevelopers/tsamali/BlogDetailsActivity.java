@@ -1,4 +1,4 @@
-package ge.idevelopers.myapplication;
+package ge.idevelopers.tsamali;
 
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;

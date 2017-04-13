@@ -1,4 +1,4 @@
-package ge.idevelopers.myapplication;
+package ge.idevelopers.tsamali;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -11,9 +11,6 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-
-import ge.idevelopers.myapplication.MainActivity;
-import ge.idevelopers.myapplication.R;
 
 /**
  * Created by soso on 4/3/17.
