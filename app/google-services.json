@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "828258396838",
+    "firebase_url": "https://tsamali-a8aee.firebaseio.com",
+    "project_id": "tsamali-a8aee",
+    "storage_bucket": "tsamali-a8aee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:828258396838:android:d995b211823e7d04",
+        "android_client_info": {
+          "package_name": "ge.idevelopers.tsamali"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "828258396838-e0sghnpstlauegmedkb1fraqjlsqfpa2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrQHscIOSbCsd2nn2lGzDko1jYy0Ou-84"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
