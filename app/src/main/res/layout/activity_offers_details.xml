@@ -110,10 +110,10 @@
                             android:layout_height="wrap_content"
                             android:textColor="#fff"
                             android:text="აქციის დაჯავშნა"
-                            android:paddingTop="8dp"
+                            android:paddingTop="12dp"
                             android:id="@+id/booking_offer"
                             android:layout_centerHorizontal="true"
-                            android:textSize="20dp"
+                            android:textSize="24sp"
                             />
                         <ImageView
                             android:layout_width="30dp"
@@ -185,7 +185,7 @@
                         >
                         <EditText
                             android:layout_width="match_parent"
-                            android:layout_height="110dp"
+                            android:layout_height="100dp"
                             android:textColor="@color/colorAccent"
                             android:gravity="top"
                             android:hint="  კომენტარი"
@@ -211,6 +211,9 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/send"
                         android:text="დაჯავშნა"
+                        android:textSize="20sp"
+                        android:paddingRight="20dp"
+                        android:paddingLeft="20dp"
                         android:textColor="#fff"
                         android:background="@drawable/round_for_booking_button"
                         >

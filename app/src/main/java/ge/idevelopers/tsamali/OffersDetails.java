@@ -66,6 +66,11 @@ public class OffersDetails extends AppCompatActivity {
         title.setTypeface(forTitles);
         text.setTypeface(forText);
         send.setTypeface(forTitles);
+        booking_offer.setTypeface(forTitles);
+        enter_name.setTypeface(forTitles);
+        enter_number.setTypeface(forTitles);
+        enter_date.setTypeface(forTitles);
+        enter_comment.setTypeface(forTitles);
 
         text.setText(text_string);
         title.setText(title_string);
