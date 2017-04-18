@@ -7,8 +7,8 @@
     <alpha
         android:fromAlpha="0"
         android:toAlpha="1"
-        android:startOffset="175"
-        android:duration="175"
+        android:startOffset="125"
+        android:duration="125"
         />
 
 

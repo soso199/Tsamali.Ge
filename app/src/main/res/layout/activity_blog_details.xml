@@ -73,23 +73,26 @@
                     android:id="@+id/title_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:textSize="20sp"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="15dp"
+                    android:textSize="22sp"
                     android:textColor="@color/black"
                     android:gravity="center"
                     />
             <ImageView
-                android:layout_width="match_parent"
+                android:layout_width="fill_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside"
                 android:layout_height="wrap_content"
                 android:id="@+id/details_image"
                 />
             <TextView
                 android:id="@+id/main_text"
+                android:padding="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:textSize="17sp"
                 android:textColor="@color/black"
-                android:paddingLeft="3dp"
                />
             </LinearLayout>
         </ScrollView>

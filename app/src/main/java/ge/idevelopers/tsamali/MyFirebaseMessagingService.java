@@ -46,7 +46,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Uri notificationSound= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-        if(title.length()==0)
+        if(title.length()==0||title==null)
             title="Tsamali.ge";
 
         android.support.v4.app.NotificationCompat.Builder mBuilder=new NotificationCompat.Builder(this)

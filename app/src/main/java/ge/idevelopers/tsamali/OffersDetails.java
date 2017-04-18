@@ -1,6 +1,7 @@
 package ge.idevelopers.tsamali;
 
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +15,9 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.facebook.FacebookSdk;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 import com.squareup.picasso.Picasso;
 
 public class OffersDetails extends AppCompatActivity {
@@ -23,6 +27,8 @@ public class OffersDetails extends AppCompatActivity {
     private TextView text;
     private ImageView image;
     private Button send;
+    private Button send2;
+    private Button fbShare;
     private ImageView cancel;
     private LinearLayout booking;
     private ScrollView scrollView;
@@ -54,6 +60,8 @@ public class OffersDetails extends AppCompatActivity {
 
         cancel=(ImageView)findViewById(R.id.cancel);
         send=(Button)findViewById(R.id.send);
+        send2=(Button)findViewById(R.id.send2);
+        fbShare=(Button)findViewById(R.id.fbShare);
         booking=(LinearLayout)findViewById(R.id.booking);
         scrollView=(ScrollView)findViewById(R.id.textAreaScroller);
 
@@ -66,6 +74,7 @@ public class OffersDetails extends AppCompatActivity {
         title.setTypeface(forTitles);
         text.setTypeface(forText);
         send.setTypeface(forTitles);
+        send2.setTypeface(forTitles);
         booking_offer.setTypeface(forTitles);
         enter_name.setTypeface(forTitles);
         enter_number.setTypeface(forTitles);
@@ -94,6 +103,13 @@ public class OffersDetails extends AppCompatActivity {
                 }, 300);
 
 
+            }
+        });
+        send2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                send.performClick();
             }
         });
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -129,6 +145,24 @@ public class OffersDetails extends AppCompatActivity {
 
             }
 
+        });
+        fbShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                FacebookSdk.sdkInitialize(getApplicationContext());
+
+                ShareLinkContent linkContent;
+
+                ShareDialog shareDialog = new ShareDialog(OffersDetails.this);
+                if (ShareDialog.canShow(ShareLinkContent.class)) {
+                    linkContent = new ShareLinkContent.Builder()
+                            .setContentUrl(Uri.parse("http://tsamali.ge/aqcia/sarelaqsacio-samkurnalo-an-sxeulis-sakoreqcio-masazhi"))
+                            .build();
+                    shareDialog.show(linkContent);
+                }
+            }
         });
 
     }

@@ -207,6 +207,8 @@ public class MainActivity extends AppCompatActivity{
 
 
         changeTabsFont();
+
+
     }
 
 
@@ -288,7 +290,7 @@ public class MainActivity extends AppCompatActivity{
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
+            // Show 2 total pages.
             return 2;
         }
 
@@ -355,12 +357,24 @@ public class MainActivity extends AppCompatActivity{
             linkContent = new ShareLinkContent.Builder()
                     .setContentUrl(Uri.parse("http://tsamali.ge/aqcia/sarelaqsacio-samkurnalo-an-sxeulis-sakoreqcio-masazhi"))
                     .build();
-
             shareDialog.show(linkContent);
         }
 
 
     }
+    public void offers(View v)
+    {
+        hamburger_main.performClick();
+        mViewPager.setCurrentItem(1,true);
+    }
+
+    public void blogs(View v)
+    {
+        hamburger_main.performClick();
+        mViewPager.setCurrentItem(0,true);
+    }
+
+
 
 
 

@@ -17,10 +17,11 @@
             android:id="@+id/text"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:ellipsize="end"
-            android:maxLines="4"
+            android:gravity="start"
+            android:maxLines="3"
             android:paddingLeft="5dp"
             android:paddingTop="10dp"
+            android:textSize="16sp"
             android:text="teqsti"
             android:textColor="@color/black" />
     </RelativeLayout>

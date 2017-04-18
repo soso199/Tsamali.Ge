@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -46,7 +47,7 @@ public class BlogsAdapter extends  RecyclerView.Adapter<BlogsAdapter.ViewHolder>
 
 
     @Override
-    public void onBindViewHolder(BlogsAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final BlogsAdapter.ViewHolder holder, int position) {
 
         BlogsModel model = blogItems.get(position);
         final String title=model.getTitle();
@@ -55,6 +56,20 @@ public class BlogsAdapter extends  RecyclerView.Adapter<BlogsAdapter.ViewHolder>
         final String url="http://tsamali.ge/"+model.getImg();
 
         holder.text.setText(title);
+        ViewTreeObserver vto = holder.text.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+                ViewTreeObserver obs = holder.text.getViewTreeObserver();
+                obs.removeGlobalOnLayoutListener(this);
+                if (holder.text.getLineCount() > 3) {
+                    int lineEndIndex = holder.text.getLayout().getLineEnd(2);
+                    String text = holder.text.getText().subSequence(0, lineEndIndex - 3) + "...";
+                    holder.text.setText(text);
+                }
+            }
+        });
         holder.seens.setText(Integer.toString(seens));
 
         Typeface typeface= Typeface.createFromAsset(context.getAssets(), "fonts/alkroundedmtav-medium.otf");

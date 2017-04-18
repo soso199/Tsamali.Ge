@@ -8,9 +8,12 @@
     android:layoutDirection="ltr"
     tools:context="ge.idevelopers.tsamali.MainActivity">
 
+    <RelativeLayout
+        android:layout_width="160dp"
+        android:layout_height="match_parent">
     <LinearLayout
         android:id="@+id/slideMenu"
-        android:layout_width="160dp"
+        android:layout_width="159dp"
         android:layout_height="match_parent"
         android:background="@color/colorPrimary"
         android:onClick="onClick"
@@ -28,6 +31,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="horizontal"
+                android:onClick="blogs"
                 android:weightSum="1">
 
                 <ImageView
@@ -61,6 +65,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="horizontal"
+                android:onClick="offers"
                 android:weightSum="1">
 
                 <ImageView
@@ -150,6 +155,15 @@
 
         </RelativeLayout>
     </LinearLayout>
+     <View
+         android:layout_width="1dp"
+         android:layout_height="match_parent"
+         android:background="@color/colorAccent"
+         android:layout_alignParentRight="true"
+         >
+
+     </View>
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/all"
