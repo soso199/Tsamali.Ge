@@ -163,6 +163,7 @@ public class Offers extends Fragment {
                                     }
                                 })
                                 .setIcon(android.R.drawable.ic_dialog_alert)
+                                .setCancelable(false)
                                 .show();
                     }
                 }
@@ -173,7 +174,8 @@ public class Offers extends Fragment {
 
 
         offersAdapter.notifyDataSetChanged();
-        progress.setCanceledOnTouchOutside(false);
+       // progress.setCanceledOnTouchOutside(false);
+        progress.setCancelable(false);
         progress.show();
     }
 

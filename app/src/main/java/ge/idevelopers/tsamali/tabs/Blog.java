@@ -166,6 +166,7 @@ public class Blog extends Fragment {
                                     }
                                 })
                                 .setIcon(android.R.drawable.ic_dialog_alert)
+                                .setCancelable(false)
                                 .show();
 
 
@@ -179,7 +180,8 @@ public class Blog extends Fragment {
         RequestQueue queue= Volley.newRequestQueue(getActivity().getApplicationContext());
         queue.add(getBlogs);
 
-        progress.setCanceledOnTouchOutside(false);
+      //  progress.setCanceledOnTouchOutside(false);
+        progress.setCancelable(false);
         progress.show();
 
         blogsAdapter.notifyDataSetChanged();

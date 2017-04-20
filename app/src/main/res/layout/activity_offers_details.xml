@@ -223,6 +223,7 @@
                             android:textColor="@color/colorAccent"
                             android:hint="აირჩიეთ თარიღი"
                             android:paddingLeft="5dp"
+                            android:focusable="false"
                             android:id="@+id/enter_date"
                             android:inputType="date"
                             android:background="@drawable/round"

@@ -1,5 +1,6 @@
 package ge.idevelopers.tsamali;
 
+import android.app.DatePickerDialog;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -9,13 +10,22 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -27,7 +37,10 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class OffersDetails extends AppCompatActivity {
 
@@ -42,11 +55,13 @@ public class OffersDetails extends AppCompatActivity {
     private LinearLayout booking;
     private ScrollView scrollView;
     private TextView booking_offer;
-    private TextView enter_name;
-    private TextView enter_number;
-    private TextView enter_date;
-    private TextView enter_comment;
+    private EditText enter_name;
+    private EditText enter_number;
+    private EditText enter_date;
+    private EditText enter_comment;
     private boolean send_butt;
+    private boolean is_form_open=false;
+    private  Calendar myCalendar;
 
 
     @Override
@@ -64,10 +79,10 @@ public class OffersDetails extends AppCompatActivity {
         title = (TextView) findViewById(R.id.title_text);
         image = (ImageView) findViewById(R.id.details_image);
         booking_offer=(TextView)findViewById(R.id.booking_offer);
-        enter_name=(TextView)findViewById(R.id.enter_name);
-        enter_number=(TextView)findViewById(R.id.enter_number);
-        enter_date=(TextView)findViewById(R.id.enter_date);
-        enter_comment=(TextView)findViewById(R.id.enter_comment);
+        enter_name=(EditText)findViewById(R.id.enter_name);
+        enter_number=(EditText)findViewById(R.id.enter_number);
+        enter_date=(EditText)findViewById(R.id.enter_date);
+        enter_comment=(EditText)findViewById(R.id.enter_comment);
 
         cancel=(ImageView)findViewById(R.id.cancel);
         send=(Button)findViewById(R.id.send);
@@ -96,22 +111,74 @@ public class OffersDetails extends AppCompatActivity {
         title.setText(title_string);
         Picasso.with(getApplicationContext()).load(url).into(image);
 
+
+       myCalendar = Calendar.getInstance();
+
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                // TODO Auto-generated method stub
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabel();
+            }
+
+        };
+
+        enter_date.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                new DatePickerDialog(OffersDetails.this, date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+
+
+
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                AlphaAnimation appear = new AlphaAnimation(0f, 1f);
-                appear.setDuration(1200);
-                appear.setFillAfter(true);
-                booking.setVisibility(View.VISIBLE);
-                booking.setAnimation(appear);
+                if(!is_form_open) {
+                    AlphaAnimation appear = new AlphaAnimation(0f, 1f);
+                    appear.setDuration(1200);
+                    appear.setFillAfter(true);
+                    booking.setVisibility(View.VISIBLE);
+                    booking.setAnimation(appear);
 
-                scrollView.postDelayed(new Runnable() {
-                    @Override public void run()
+                    is_form_open=true;
+
+                    scrollView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            scrollView.fullScroll(View.FOCUS_DOWN);
+                        }
+                    }, 300);
+                }
+                else
+                {
+
+
+                    String name=enter_name.getText().toString();
+                    String number=enter_number.getText().toString();
+                    String date=enter_date.getText().toString();
+                    String comment=enter_comment.getText().toString();
+                    if(name.isEmpty() ||number.isEmpty() || date.isEmpty() || comment.isEmpty())
                     {
-                        scrollView.fullScroll(View.FOCUS_DOWN);
+                        Toast.makeText(OffersDetails.this, " გთხოვთ შეავსოთ ყველა ველი ", Toast.LENGTH_SHORT).show();
                     }
-                }, 300);
+                    else
+                        sendRespond(name,number,date,comment);
+
+
+                }
 
 
             }
@@ -127,6 +194,8 @@ public class OffersDetails extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AlphaAnimation hide = new AlphaAnimation(1f, 0f);
+
+                is_form_open=false;
 
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 hide.setDuration(700);
@@ -172,12 +241,17 @@ public class OffersDetails extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    private void sendRespond()
+    private void sendRespond(String name,String number,String date,String comment)
     {
         final String URL = "/volley/resource/12";
 // Post params to be sent to the server
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("token", "AbCdEfGh123456");
+        params.put("title", title.getText().toString());
+        params.put("name",name);
+        params.put("phone", number);
+        params.put("date", date);
+        params.put("comment",comment);
+
 
         JsonObjectRequest req = new JsonObjectRequest(URL, new JSONObject(params),
                 new Response.Listener<JSONObject>() {
@@ -188,11 +262,22 @@ public class OffersDetails extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
+                        Toast.makeText(OffersDetails.this, " მოთხოვნა წარმატებით გაიგზავნა  ", Toast.LENGTH_SHORT).show();
+                        cancel.performClick();
                     }
+
+
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                VolleyLog.e("Error: ", error.getMessage());
+                String message = "ინტერნეტთან წვდომა ვერ მოხერხდა.. გთხოვთ შეამოწმოთ კავშირი!";
+                if (error instanceof NetworkError) {
+                    message = "ინტერნეტთან წვდომა ვერ მოხერხდა.. გთხოვთ შეამოწმოთ კავშირი!";
+                } else if (error instanceof ServerError) {
+                    message = "სერვერთან წვდომა ვერ მოხერხდა.. გთხოვთ ცადოთ მოგვიანებით!";
+                }
+                Toast.makeText(OffersDetails.this,message, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -200,4 +285,13 @@ public class OffersDetails extends AppCompatActivity {
         RequestQueue queue= Volley.newRequestQueue(getApplicationContext());
         queue.add(req);
     }
+
+    private void updateLabel() {
+
+        String myFormat = "MM/dd/yy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+        enter_date.setText(sdf.format(myCalendar.getTime()));
+    }
+
 }
