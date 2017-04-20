@@ -4,6 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ge.idevelopers.tsamali.SplashScreen">
+    tools:context="ge.idevelopers.tsamali.SplashScreen"
+    android:background="#fff"
+    >
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:src="@drawable/tsamalilaunch"
+        />
 </android.support.constraint.ConstraintLayout>

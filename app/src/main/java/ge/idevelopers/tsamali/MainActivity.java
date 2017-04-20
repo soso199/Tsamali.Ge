@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity{
     private RelativeLayout cover;
     public  List<BlogsModel> blogsList;
     public static boolean isSlidable=true;
+    public static int dialog=0;
 
 
     @Override
@@ -276,7 +277,6 @@ public class MainActivity extends AppCompatActivity{
             {
                 case 0:
                      Blog blog =new Blog();
-
                     return blog;
 
 

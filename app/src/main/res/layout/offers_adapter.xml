@@ -16,14 +16,13 @@
         <ImageView
             android:layout_width="fill_parent"
             android:adjustViewBounds="true"
-            android:scaleType="fitXY"
             android:src="@drawable/empty"
             android:layout_height="wrap_content" />
         <ImageView
             android:id="@+id/image_offers"
             android:layout_width="fill_parent"
             android:adjustViewBounds="true"
-            android:scaleType="fitXY"
+
             android:layout_height="wrap_content"
             />
     </RelativeLayout>

@@ -33,7 +33,15 @@
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.2">
+                    android:layout_weight="0.2"
+                    android:gravity="center_vertical"
+                    >
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:onClick="back"
+                        android:src="@drawable/backbutton"
+                        />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -62,12 +70,16 @@
         <ScrollView android:id="@+id/textAreaScroller"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical">
+
+            android:fillViewport="true"
+            android:scrollbars="vertical"
+ >
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 >
+
                 <TextView
                     android:id="@+id/title_text"
                     android:layout_width="match_parent"
@@ -78,13 +90,24 @@
                     android:textColor="@color/black"
                     android:gravity="center"
                     />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
                 <ImageView
                     android:layout_width="fill_parent"
                     android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
+                    android:src="@drawable/empty"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
                     android:layout_height="wrap_content"
                     android:id="@+id/details_image"
                     />
+                </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -113,7 +136,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="17sp"
                     android:textColor="@color/black"
-                    android:padding="10dp"
+                    android:padding="15dp"
                     />
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -250,18 +273,18 @@
                     </Button>
 
     </RelativeLayout>
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/send"
-                    android:id="@+id/fbShare"
-                    android:text="გაზიარება"
-                    android:textSize="12sp"
-                    android:textColor="#fff"
-                    android:background="#1e35a6"
-                    >
 
-                </Button>
+                <com.facebook.share.widget.ShareButton
+                    android:id="@+id/fbShare"
+                    android:layout_width="100dp"
+                    android:layout_height="25dp"
+                    android:text=""
+                    android:layout_alignBottom="@id/send"
+                    android:background="@drawable/share"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="5dp">
+
+                </com.facebook.share.widget.ShareButton>
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>

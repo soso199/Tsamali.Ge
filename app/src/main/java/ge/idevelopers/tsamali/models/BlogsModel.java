@@ -9,12 +9,14 @@ public class BlogsModel{
     private String img;
     private String text;
     private int views;
+    private String link;
 
-    public BlogsModel(String title, String img, String text, int views) {
+    public BlogsModel(String title, String img, String text, int views,String link) {
         this.title = title;
         this.img = img;
         this.text = text;
         this.views = views;
+        this.link=link;
     }
 
     public String getTitle() {
@@ -47,5 +49,13 @@ public class BlogsModel{
 
     public void setViews(int views) {
         this.views = views;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }

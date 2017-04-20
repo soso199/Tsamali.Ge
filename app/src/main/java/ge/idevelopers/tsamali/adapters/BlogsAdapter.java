@@ -52,6 +52,7 @@ public class BlogsAdapter extends  RecyclerView.Adapter<BlogsAdapter.ViewHolder>
         BlogsModel model = blogItems.get(position);
         final String title=model.getTitle();
         final String text=model.getText();
+        final String link=model.getLink();
         int seens=model.getViews();
         final String url="http://tsamali.ge/"+model.getImg();
 
@@ -83,6 +84,7 @@ public class BlogsAdapter extends  RecyclerView.Adapter<BlogsAdapter.ViewHolder>
                 intent.putExtra("title",title);
                 intent.putExtra("url",url);
                 intent.putExtra("text",text);
+                intent.putExtra("link",link);
                 context.startActivity(intent);
             }
         });

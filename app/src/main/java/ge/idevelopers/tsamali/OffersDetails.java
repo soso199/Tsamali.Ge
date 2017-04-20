@@ -11,14 +11,23 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.facebook.FacebookSdk;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.widget.ShareDialog;
+import com.facebook.share.widget.ShareButton;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 
 public class OffersDetails extends AppCompatActivity {
 
@@ -28,7 +37,7 @@ public class OffersDetails extends AppCompatActivity {
     private ImageView image;
     private Button send;
     private Button send2;
-    private Button fbShare;
+    private ShareButton fbShare;
     private ImageView cancel;
     private LinearLayout booking;
     private ScrollView scrollView;
@@ -37,6 +46,7 @@ public class OffersDetails extends AppCompatActivity {
     private TextView enter_number;
     private TextView enter_date;
     private TextView enter_comment;
+    private boolean send_butt;
 
 
     @Override
@@ -48,6 +58,7 @@ public class OffersDetails extends AppCompatActivity {
         String title_string = extras.getString("title");
         String url = extras.getString("url");
         String text_string = extras.getString("text");
+        String link=extras.getString("link");
 
         text = (TextView) findViewById(R.id.main_text);
         title = (TextView) findViewById(R.id.title_text);
@@ -61,7 +72,7 @@ public class OffersDetails extends AppCompatActivity {
         cancel=(ImageView)findViewById(R.id.cancel);
         send=(Button)findViewById(R.id.send);
         send2=(Button)findViewById(R.id.send2);
-        fbShare=(Button)findViewById(R.id.fbShare);
+        fbShare=(ShareButton) findViewById(R.id.fbShare);
         booking=(LinearLayout)findViewById(R.id.booking);
         scrollView=(ScrollView)findViewById(R.id.textAreaScroller);
 
@@ -146,24 +157,47 @@ public class OffersDetails extends AppCompatActivity {
             }
 
         });
-        fbShare.setOnClickListener(new View.OnClickListener() {
+
+
+
+        ShareLinkContent content = new ShareLinkContent.Builder()
+                .setContentUrl(Uri.parse(link))
+                .build();
+
+        fbShare.setShareContent(content);
+
+    }
+    public void back(View v)
+    {
+        super.onBackPressed();
+    }
+
+    private void sendRespond()
+    {
+        final String URL = "/volley/resource/12";
+// Post params to be sent to the server
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("token", "AbCdEfGh123456");
+
+        JsonObjectRequest req = new JsonObjectRequest(URL, new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            VolleyLog.v("Response:%n %s", response.toString(4));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
             @Override
-            public void onClick(View v) {
-
-
-                FacebookSdk.sdkInitialize(getApplicationContext());
-
-                ShareLinkContent linkContent;
-
-                ShareDialog shareDialog = new ShareDialog(OffersDetails.this);
-                if (ShareDialog.canShow(ShareLinkContent.class)) {
-                    linkContent = new ShareLinkContent.Builder()
-                            .setContentUrl(Uri.parse("http://tsamali.ge/aqcia/sarelaqsacio-samkurnalo-an-sxeulis-sakoreqcio-masazhi"))
-                            .build();
-                    shareDialog.show(linkContent);
-                }
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.e("Error: ", error.getMessage());
             }
         });
 
+// add the request object to the queue to be executed
+        RequestQueue queue= Volley.newRequestQueue(getApplicationContext());
+        queue.add(req);
     }
 }
