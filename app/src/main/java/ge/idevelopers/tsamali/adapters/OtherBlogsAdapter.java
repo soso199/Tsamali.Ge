@@ -24,7 +24,7 @@ import ge.idevelopers.tsamali.models.BlogsModel;
  * Created by soso on 4/5/17.
  */
 
-public class BlogsAdapter extends  RecyclerView.Adapter<BlogsAdapter.ViewHolder> {
+public class OtherBlogsAdapter extends  RecyclerView.Adapter<OtherBlogsAdapter.ViewHolder> {
 
     Context context;
     private List<BlogsModel> blogItems;
@@ -34,26 +34,25 @@ public class BlogsAdapter extends  RecyclerView.Adapter<BlogsAdapter.ViewHolder>
 
     @Override
     public  ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.blogs_adapter, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.other_blogs_adapter, parent, false);
 
 
         return new ViewHolder(view);
     }
 
-    public BlogsAdapter(List<BlogsModel> items, Context context) {
+    public OtherBlogsAdapter(List<BlogsModel> items, Context context) {
         this.blogItems = items;
         this.context = context;
     }
 
 
     @Override
-    public void onBindViewHolder(final BlogsAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final OtherBlogsAdapter.ViewHolder holder, int position) {
 
         BlogsModel model = blogItems.get(position);
         final String title=model.getTitle();
         final String text=model.getText();
         final String link=model.getLink();
-        int seens=model.getViews();
         final String url="http://tsamali.ge/"+model.getImg();
 
         holder.text.setText(title);
@@ -71,7 +70,7 @@ public class BlogsAdapter extends  RecyclerView.Adapter<BlogsAdapter.ViewHolder>
                 }
             }
         });
-        holder.seens.setText(Integer.toString(seens));
+
 
         Typeface typeface= Typeface.createFromAsset(context.getAssets(), "fonts/alkroundedmtav-medium.otf");
         holder.text.setTypeface(typeface);
@@ -87,6 +86,7 @@ public class BlogsAdapter extends  RecyclerView.Adapter<BlogsAdapter.ViewHolder>
                 intent.putExtra("link",link);
                 intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 context.startActivity(intent);
+
             }
         });
 
@@ -101,7 +101,6 @@ public class BlogsAdapter extends  RecyclerView.Adapter<BlogsAdapter.ViewHolder>
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView text;
-        TextView seens;
         ImageView image;
         LinearLayout blog;
 
@@ -110,7 +109,6 @@ public class BlogsAdapter extends  RecyclerView.Adapter<BlogsAdapter.ViewHolder>
             super(itemView);
 
             text = (TextView) itemView.findViewById(R.id.text);
-            seens=(TextView) itemView.findViewById(R.id.seens);
             image = (ImageView) itemView.findViewById(R.id.image);
             blog=(LinearLayout) itemView.findViewById(R.id.blog);
 

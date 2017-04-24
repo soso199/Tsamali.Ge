@@ -1,6 +1,7 @@
 package ge.idevelopers.tsamali;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -31,6 +33,7 @@ import com.facebook.share.widget.ShareDialog;
 
 import java.util.List;
 
+import ge.idevelopers.tsamali.fragments.SettingsFragment;
 import ge.idevelopers.tsamali.models.BlogsModel;
 import ge.idevelopers.tsamali.tabs.Blog;
 import ge.idevelopers.tsamali.tabs.Offers;
@@ -55,6 +58,7 @@ public class MainActivity extends AppCompatActivity{
     ListView mMenuList;
     ImageView appImage;
     private TextView TitleText;
+    public static SharedPreferences prefs = null;
     private TextView blog;
     private TextView aqciebi;
     private TextView contact;
@@ -79,11 +83,17 @@ public class MainActivity extends AppCompatActivity{
     public  List<BlogsModel> blogsList;
     public static boolean isSlidable=true;
     public static int dialog=0;
+    public static boolean showNotifications=true;
+    private SettingsFragment settFragment;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        prefs = getSharedPreferences("ge.idevelopers.tsamali", MODE_PRIVATE);
+        showNotifications = prefs.getBoolean("numRun",false);
+
         setContentView(R.layout.activity_main);
 
         blog=(TextView)findViewById(R.id.blog_text);
@@ -99,6 +109,7 @@ public class MainActivity extends AppCompatActivity{
         contact.setTypeface(typeface);
         settings.setTypeface(typeface);
 
+        settFragment=new SettingsFragment();
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -373,6 +384,26 @@ public class MainActivity extends AppCompatActivity{
         hamburger_main.performClick();
         mViewPager.setCurrentItem(0,true);
     }
+    public void details(View v)
+    {
+        getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.fadein, 0, 0, R.anim.fadeout)
+                .add(R.id.fConteiner, settFragment).commit();
+    }
+    public void settings(View v)
+    {
+        v = (View) findViewById(R.id.fConteiner);
+        v.setVisibility(View.VISIBLE);
+
+        getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.fadein, 0, 0, R.anim.fadeout)
+                .add(R.id.fConteiner, settFragment).commit();
+
+        AlphaAnimation animation1 = new AlphaAnimation(1f, 0.3f);
+        animation1.setDuration(500);
+        animation1.setFillAfter(true);
+        mSlidingPanel.startAnimation(animation1);
+
+    }
+
 
 
 

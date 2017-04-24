@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ge.idevelopers.tsamali.MySlidingPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    >
+<ge.idevelopers.tsamali.MySlidingPanelLayout
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -92,7 +97,9 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:onClick="settings"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -125,7 +132,9 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:onClick="settings"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -285,4 +294,17 @@
             android:visibility="invisible"></RelativeLayout>
 
     </RelativeLayout>
+
+
+
+
 </ge.idevelopers.tsamali.MySlidingPanelLayout>
+
+
+<FrameLayout
+android:visibility="gone"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:id="@+id/fConteiner">
+</FrameLayout>
+</FrameLayout>

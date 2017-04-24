@@ -22,6 +22,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.ServerError;
@@ -29,9 +30,12 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.facebook.FacebookSdk;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareButton;
+import com.facebook.share.widget.ShareDialog;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -40,7 +44,9 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
 
 public class OffersDetails extends AppCompatActivity {
 
@@ -50,7 +56,7 @@ public class OffersDetails extends AppCompatActivity {
     private ImageView image;
     private Button send;
     private Button send2;
-    private ShareButton fbShare;
+    private ImageView fbShare;
     private ImageView cancel;
     private LinearLayout booking;
     private ScrollView scrollView;
@@ -73,7 +79,7 @@ public class OffersDetails extends AppCompatActivity {
         String title_string = extras.getString("title");
         String url = extras.getString("url");
         String text_string = extras.getString("text");
-        String link=extras.getString("link");
+        final String link=extras.getString("link");
 
         text = (TextView) findViewById(R.id.main_text);
         title = (TextView) findViewById(R.id.title_text);
@@ -87,7 +93,7 @@ public class OffersDetails extends AppCompatActivity {
         cancel=(ImageView)findViewById(R.id.cancel);
         send=(Button)findViewById(R.id.send);
         send2=(Button)findViewById(R.id.send2);
-        fbShare=(ShareButton) findViewById(R.id.fbShare);
+        fbShare=(ImageView) findViewById(R.id.fbShare);
         booking=(LinearLayout)findViewById(R.id.booking);
         scrollView=(ScrollView)findViewById(R.id.textAreaScroller);
 
@@ -175,7 +181,11 @@ public class OffersDetails extends AppCompatActivity {
                         Toast.makeText(OffersDetails.this, " გთხოვთ შეავსოთ ყველა ველი ", Toast.LENGTH_SHORT).show();
                     }
                     else
-                        sendRespond(name,number,date,comment);
+                        try {
+                            sendRespond(name,number,date,comment);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
 
                 }
@@ -227,13 +237,30 @@ public class OffersDetails extends AppCompatActivity {
 
         });
 
+        fbShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                FacebookSdk.sdkInitialize(getApplicationContext());
+
+                ShareLinkContent linkContent;
+
+                ShareDialog shareDialog = new ShareDialog(OffersDetails.this);
+                if (ShareDialog.canShow(ShareLinkContent.class)) {
+                    linkContent = new ShareLinkContent.Builder()
+                            .setContentUrl(Uri.parse(link))
+                            .build();
+                    shareDialog.show(linkContent);
+                }
 
 
-        ShareLinkContent content = new ShareLinkContent.Builder()
-                .setContentUrl(Uri.parse(link))
-                .build();
 
-        fbShare.setShareContent(content);
+            }
+        });
+
+
+
+
+
 
     }
     public void back(View v)
@@ -241,49 +268,49 @@ public class OffersDetails extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    private void sendRespond(String name,String number,String date,String comment)
-    {
-        final String URL = "/volley/resource/12";
+    private void sendRespond(final String name,final String number,final String date,final String comment) throws JSONException {
+        final String URL = "http://tsamali.ge/api/ard/index.php";
 // Post params to be sent to the server
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("title", title.getText().toString());
-        params.put("name",name);
-        params.put("phone", number);
-        params.put("date", date);
-        params.put("comment",comment);
 
-
-        JsonObjectRequest req = new JsonObjectRequest(URL, new JSONObject(params),
-                new Response.Listener<JSONObject>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,
+                new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            VolleyLog.v("Response:%n %s", response.toString(4));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
+                    public void onResponse(String response) {
                         Toast.makeText(OffersDetails.this, " მოთხოვნა წარმატებით გაიგზავნა  ", Toast.LENGTH_SHORT).show();
                         cancel.performClick();
                     }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        String message = "ინტერნეტთან წვდომა ვერ მოხერხდა.. გთხოვთ შეამოწმოთ კავშირი!";
+                        if (error instanceof ServerError) {
+                            message = "სერვერთან წვდომა ვერ მოხერხდა.. გთხოვთ ცადოთ მოგვიანებით!";
+                        }
+                        Toast.makeText(OffersDetails.this,message, Toast.LENGTH_SHORT).show();
 
 
-                }, new Response.ErrorListener() {
+                    }
+                }) {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                String message = "ინტერნეტთან წვდომა ვერ მოხერხდა.. გთხოვთ შეამოწმოთ კავშირი!";
-                if (error instanceof NetworkError) {
-                    message = "ინტერნეტთან წვდომა ვერ მოხერხდა.. გთხოვთ შეამოწმოთ კავშირი!";
-                } else if (error instanceof ServerError) {
-                    message = "სერვერთან წვდომა ვერ მოხერხდა.. გთხოვთ ცადოთ მოგვიანებით!";
-                }
-                Toast.makeText(OffersDetails.this,message, Toast.LENGTH_SHORT).show();
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("title", title.getText().toString());
+                params.put("name", name);
+                params.put("phone", number);
+                params.put("date", date);
+                params.put("comment", comment);
+
+                return params;
             }
-        });
+        };
+
+
+
 
 // add the request object to the queue to be executed
         RequestQueue queue= Volley.newRequestQueue(getApplicationContext());
-        queue.add(req);
+        queue.add(stringRequest);
     }
 
     private void updateLabel() {

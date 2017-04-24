@@ -110,20 +110,47 @@
                     android:layout_height="wrap_content"
                     android:padding="15dp"
                     android:textColor="@color/black"
-                    android:textSize="17sp" />
+                    android:textSize="19sp" />
 
-                <com.facebook.share.widget.ShareButton
+                <ImageView
                     android:id="@+id/fbShare_blog"
-                    android:layout_width="100dp"
-                    android:layout_height="25dp"
-                    android:text=""
-                    android:background="@drawable/share"
-                    android:textColor="@color/com_facebook_share_button_text_color"
-                    android:textSize="10sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/share"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="5dp">
+                    android:layout_marginBottom="15dp">
+                </ImageView>
 
-                </com.facebook.share.widget.ShareButton>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/colorAccent"
+                    >
+
+                </View>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:id="@+id/other_articles_text"
+                    android:text="იხილეთ სხვა სტატიები"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:contentDescription=""
+                    android:layoutDirection="ltr"
+                    android:orientation="vertical" />
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>
