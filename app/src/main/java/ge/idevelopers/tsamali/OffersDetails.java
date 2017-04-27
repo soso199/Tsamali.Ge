@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -36,6 +37,8 @@ import com.facebook.FacebookSdk;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareButton;
 import com.facebook.share.widget.ShareDialog;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -68,6 +71,7 @@ public class OffersDetails extends AppCompatActivity {
     private boolean send_butt;
     private boolean is_form_open=false;
     private  Calendar myCalendar;
+    public Tracker mTracker;
 
 
     @Override
@@ -80,6 +84,21 @@ public class OffersDetails extends AppCompatActivity {
         String url = extras.getString("url");
         String text_string = extras.getString("text");
         final String link=extras.getString("link");
+
+
+
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+
+        mTracker.setScreenName(title_string);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
+
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Action")
+                .setAction("Share")
+                .build());
+
 
         text = (TextView) findViewById(R.id.main_text);
         title = (TextView) findViewById(R.id.title_text);
@@ -113,7 +132,7 @@ public class OffersDetails extends AppCompatActivity {
         enter_date.setTypeface(forTitles);
         enter_comment.setTypeface(forTitles);
 
-        text.setText(text_string);
+        text.setText(Html.fromHtml(text_string));
         title.setText(title_string);
         Picasso.with(getApplicationContext()).load(url).into(image);
 
@@ -174,13 +193,10 @@ public class OffersDetails extends AppCompatActivity {
 
                     String name=enter_name.getText().toString();
                     String number=enter_number.getText().toString();
-                    String date=enter_date.getText().toString();
+                    String date=generateDate(enter_date.getText().toString());
                     String comment=enter_comment.getText().toString();
-                    if(name.isEmpty() ||number.isEmpty() || date.isEmpty() || comment.isEmpty())
-                    {
-                        Toast.makeText(OffersDetails.this, " გთხოვთ შეავსოთ ყველა ველი ", Toast.LENGTH_SHORT).show();
-                    }
-                    else
+
+
                         try {
                             sendRespond(name,number,date,comment);
                         } catch (JSONException e) {
@@ -300,6 +316,7 @@ public class OffersDetails extends AppCompatActivity {
                 params.put("phone", number);
                 params.put("date", date);
                 params.put("comment", comment);
+                params.put("type", "აქციის დაჯავშნა");
 
                 return params;
             }
@@ -319,6 +336,57 @@ public class OffersDetails extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
         enter_date.setText(sdf.format(myCalendar.getTime()));
+    }
+    public String generateDate(String date)
+    {
+        String month=date.substring(0,1);
+
+        switch (month)
+        {
+            case "01":
+                month="იანვარი";
+                        break;
+            case "02":
+                month="თებერვალი";
+                break;
+            case "03":
+                month="მარტი";
+                break;
+            case "04":
+                month="აპრილი";
+                break;
+            case "05":
+                month="მაისი";
+                break;
+            case "06":
+                month="ივნისი";
+                break;
+            case "07":
+                month="ივლისი";
+                break;
+            case "08":
+                month="აგვისტო";
+                break;
+            case "09":
+                month="სექტემბერი";
+                break;
+            case "10":
+                month="ოქტომბერი";
+                break;
+            case "11":
+                month="ნოემბერი";
+                break;
+            case "12":
+                month="დეკემბერი";
+                break;
+
+
+        }
+        date=date.substring(3,4)+" "+month+" "+date.substring(6,7);
+
+        return date;
+
+
     }
 
 }

@@ -1,32 +1,35 @@
 {
   "project_info": {
-    "project_number": "828258396838",
-    "firebase_url": "https://tsamali-a8aee.firebaseio.com",
-    "project_id": "tsamali-a8aee",
-    "storage_bucket": "tsamali-a8aee.appspot.com"
+    "project_number": "1047519412148",
+    "firebase_url": "https://testprojects-36f1c.firebaseio.com",
+    "project_id": "testprojects-36f1c",
+    "storage_bucket": "testprojects-36f1c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:828258396838:android:d995b211823e7d04",
+        "mobilesdk_app_id": "1:1047519412148:android:d995b211823e7d04",
         "android_client_info": {
           "package_name": "ge.idevelopers.tsamali"
         }
       },
       "oauth_client": [
         {
-          "client_id": "828258396838-e0sghnpstlauegmedkb1fraqjlsqfpa2.apps.googleusercontent.com",
+          "client_id": "1047519412148-3f5rk15mmu52c4hmfimb9omupcpficr1.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBrQHscIOSbCsd2nn2lGzDko1jYy0Ou-84"
+          "current_key": "AIzaSyCcAczoNPsVG_ETVHthXhOKRfIVpiMuxu4"
         }
       ],
       "services": {
         "analytics_service": {
-          "status": 1
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-84597584-4"
+          }
         },
         "appinvite_service": {
           "status": 1,

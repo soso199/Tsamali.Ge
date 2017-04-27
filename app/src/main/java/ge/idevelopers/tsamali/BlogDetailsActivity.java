@@ -1,12 +1,25 @@
 package ge.idevelopers.tsamali;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LevelListDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ImageSpan;
+import android.text.style.URLSpan;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,8 +27,16 @@ import android.widget.TextView;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareButton;
 import com.facebook.share.widget.ShareDialog;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.squareup.picasso.Picasso;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,6 +57,10 @@ public class BlogDetailsActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private OtherBlogsAdapter blogsAdapter;
     private List<BlogsModel> threeBlogsList;
+
+    public Tracker mTracker;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,8 +69,22 @@ public class BlogDetailsActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
             String title_string = extras.getString("title");
             String url = extras.getString("url");
-            String text_string = extras.getString("text");
+            final String text_string = extras.getString("text");
             final String link=extras.getString("link");
+
+
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+
+        mTracker.setScreenName(title_string);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
+
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Action")
+                .setAction("Share")
+                .build());
+
 
         text=(TextView)findViewById(R.id.main_text);
         title=(TextView)findViewById(R.id.title_text);
@@ -60,7 +99,19 @@ public class BlogDetailsActivity extends AppCompatActivity {
         text.setTypeface(forText);
         otherArticlesTet.setTypeface(forTitles);
 
-        text.setText(text_string);
+
+        text.setText(Html.fromHtml(text_string));
+
+        text.setMovementMethod(LinkMovementMethod.getInstance());
+
+
+
+//        text.setText(Html.fromHtml(text_string, new Html.ImageGetter() {
+//            @Override
+//            public Drawable getDrawable(String source) {
+//                return null;
+//            }
+//        }, null));
         title.setText(title_string);
         Picasso.with(getApplicationContext()).load(url).into(image);
 
@@ -115,6 +166,9 @@ public class BlogDetailsActivity extends AppCompatActivity {
         });
 
     }
+
+
+
     public void back(View v)
     {
         super.onBackPressed();

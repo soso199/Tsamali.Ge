@@ -33,11 +33,9 @@
                 android:id="@+id/switch_text"
                 />
             <Switch
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/mSwitch"
-                android:scaleX="2"
-                android:scaleY="2"
                 android:layout_margin="15dp"
 
                 />
@@ -45,6 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="შენახვა"
+                android:onClick="closeFragment"
                 android:id="@+id/save_settings"
                 android:background="@drawable/round_settings"
                 android:textColor="@color/black"

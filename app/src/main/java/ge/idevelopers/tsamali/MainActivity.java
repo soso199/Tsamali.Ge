@@ -1,5 +1,6 @@
 package ge.idevelopers.tsamali;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -14,6 +15,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,19 +29,22 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.facebook.FacebookSdk;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
-import java.util.List;
-
+import ge.idevelopers.tsamali.fragments.InformationFragment;
 import ge.idevelopers.tsamali.fragments.SettingsFragment;
-import ge.idevelopers.tsamali.models.BlogsModel;
 import ge.idevelopers.tsamali.tabs.Blog;
 import ge.idevelopers.tsamali.tabs.Offers;
 
 public class MainActivity extends AppCompatActivity{
 
+    private static final String TAG ="shevida" ;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -55,10 +60,9 @@ public class MainActivity extends AppCompatActivity{
      */
     private ViewPager mViewPager;
     SlidingPaneLayout mSlidingPanel;
-    ListView mMenuList;
     ImageView appImage;
     private TextView TitleText;
-    public static SharedPreferences prefs = null;
+    private   SharedPreferences prefs = null;
     private TextView blog;
     private TextView aqciebi;
     private TextView contact;
@@ -80,11 +84,22 @@ public class MainActivity extends AppCompatActivity{
     private RelativeLayout hamburger_main;
     private RelativeLayout all;
     private RelativeLayout cover;
-    public  List<BlogsModel> blogsList;
     public static boolean isSlidable=true;
     public static int dialog=0;
-    public static boolean showNotifications=true;
+    public static boolean showNotifications;
+    public  static boolean fragmentShown=false;
     private SettingsFragment settFragment;
+    private InformationFragment infFragment;
+    private View v;
+    private LinearLayout slideMenu;
+    private LinearLayout openBlogs;
+    private LinearLayout openOffers;
+    private LinearLayout openInformation;
+    private LinearLayout openSettings;
+
+    public Tracker mTracker;
+    private FirebaseAnalytics mFirebaseAnalytics;
+
 
 
     @Override
@@ -92,9 +107,32 @@ public class MainActivity extends AppCompatActivity{
 
         super.onCreate(savedInstanceState);
         prefs = getSharedPreferences("ge.idevelopers.tsamali", MODE_PRIVATE);
-        showNotifications = prefs.getBoolean("numRun",false);
+        showNotifications=prefs.getBoolean("notification",true);
 
         setContentView(R.layout.activity_main);
+//        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+//
+//       mTracker = application.getDefaultTracker();
+//
+//
+//        mTracker.setScreenName("Image~" + "ss");
+//        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+//
+//        mTracker.send(new HitBuilders.EventBuilder()
+//                .setCategory("Action")
+//                .setAction("Share")
+//                .build());
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+
+        mTracker.setScreenName("გახსნა აპლიკაცია");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
+
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Action")
+                .setAction("Share")
+                .build());
 
         blog=(TextView)findViewById(R.id.blog_text);
         aqciebi=(TextView)findViewById(R.id.aqciebi_text);
@@ -111,6 +149,7 @@ public class MainActivity extends AppCompatActivity{
 
         settFragment=new SettingsFragment();
 
+        infFragment=new InformationFragment();
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -150,6 +189,12 @@ public class MainActivity extends AppCompatActivity{
 
         appImage = (ImageView) findViewById(android.R.id.home);
         TitleText = (TextView) findViewById(android.R.id.title);
+
+        slideMenu=(LinearLayout) findViewById(R.id.slideMenu);
+        openBlogs=(LinearLayout) findViewById(R.id.open_blog);
+        openOffers=(LinearLayout) findViewById(R.id.open_offers);
+        openInformation=(LinearLayout) findViewById(R.id.open_information);
+        openSettings=(LinearLayout) findViewById(R.id.open_settings);
 
         all=(RelativeLayout)findViewById(R.id.all);
         mSlidingPanel = (SlidingPaneLayout) findViewById(R.id.main_content);
@@ -218,10 +263,13 @@ public class MainActivity extends AppCompatActivity{
 
 
 
+
+
         changeTabsFont();
 
 
     }
+
 
 
 
@@ -318,6 +366,14 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
+    @Override
+    public void onBackPressed() {
+        if (fragmentShown)
+            closeFragment(v);
+        else
+        super.onBackPressed();
+    }
+
     private void changeTabsFont() {
 
         ViewGroup vg = (ViewGroup) tabLayout.getChildAt(0);
@@ -333,6 +389,9 @@ public class MainActivity extends AppCompatActivity{
             }
         }
     }
+
+
+
    public void onClick(View v)
     {
 
@@ -344,9 +403,7 @@ public class MainActivity extends AppCompatActivity{
         Intent i = new Intent(Intent.ACTION_SENDTO);
         i.setType("message/rfc822");
         i.setData(Uri.parse("mailto:"));
-        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"tukhashvilisoso@gmail.com"});
-        i.putExtra(Intent.EXTRA_SUBJECT, "testing mail");
-        i.putExtra(Intent.EXTRA_TEXT   , "body of email");
+        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"info@tsamali"});
         try {
             startActivity(Intent.createChooser(i, "Send mail..."));
         } catch (android.content.ActivityNotFoundException ex) {
@@ -354,8 +411,8 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-    ////*****Shearing to facebook****\\\\\\\\\\\\\
-    public void fbShare(View v)
+
+    public void openFacebook(View v)
     {
 
 
@@ -373,6 +430,46 @@ public class MainActivity extends AppCompatActivity{
 
 
     }
+
+    public void openYoutube(View v)
+    {
+
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+
+        ShareLinkContent linkContent;
+
+        ShareDialog shareDialog = new ShareDialog(this);
+        if (ShareDialog.canShow(ShareLinkContent.class)) {
+            linkContent = new ShareLinkContent.Builder()
+                    .setContentUrl(Uri.parse("http://tsamali.ge/aqcia/sarelaqsacio-samkurnalo-an-sxeulis-sakoreqcio-masazhi"))
+                    .build();
+            shareDialog.show(linkContent);
+        }
+
+
+    }
+
+    public void cell(View v)
+    {
+
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+
+        ShareLinkContent linkContent;
+
+        ShareDialog shareDialog = new ShareDialog(this);
+        if (ShareDialog.canShow(ShareLinkContent.class)) {
+            linkContent = new ShareLinkContent.Builder()
+                    .setContentUrl(Uri.parse("http://tsamali.ge/aqcia/sarelaqsacio-samkurnalo-an-sxeulis-sakoreqcio-masazhi"))
+                    .build();
+            shareDialog.show(linkContent);
+        }
+
+
+    }
+
+
     public void offers(View v)
     {
         hamburger_main.performClick();
@@ -384,11 +481,7 @@ public class MainActivity extends AppCompatActivity{
         hamburger_main.performClick();
         mViewPager.setCurrentItem(0,true);
     }
-    public void details(View v)
-    {
-        getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.fadein, 0, 0, R.anim.fadeout)
-                .add(R.id.fConteiner, settFragment).commit();
-    }
+
     public void settings(View v)
     {
         v = (View) findViewById(R.id.fConteiner);
@@ -402,9 +495,101 @@ public class MainActivity extends AppCompatActivity{
         animation1.setFillAfter(true);
         mSlidingPanel.startAnimation(animation1);
 
+        mSlidingPanel.setEnabled(false);
+        mSlidingPanel.setClickable(false);
+
+        hamburger_main.setClickable(false);
+        hamburger_main.setEnabled(false);
+
+        slideMenu.setClickable(false);
+        slideMenu.setEnabled(false);
+
+        openBlogs.setClickable(false);
+        openBlogs.setEnabled(false);
+
+        openOffers.setClickable(false);
+        openOffers.setEnabled(false);
+
+        openInformation.setClickable(false);
+        openInformation.setEnabled(false);
+
+        openSettings.setClickable(false);
+        openSettings.setEnabled(false);
+
+
+    }
+
+    public void Information(View v)
+    {
+        v = (View) findViewById(R.id.fConteiner);
+        v.setVisibility(View.VISIBLE);
+
+        getSupportFragmentManager().beginTransaction().addToBackStack(null).setCustomAnimations(R.anim.fadein, 0, 0, R.anim.fadeout)
+                .add(R.id.fConteiner, infFragment).commit();
+
+        AlphaAnimation animation1 = new AlphaAnimation(1f, 0.3f);
+        animation1.setDuration(500);
+        animation1.setFillAfter(true);
+        mSlidingPanel.startAnimation(animation1);
+
+        mSlidingPanel.setEnabled(false);
+        mSlidingPanel.setClickable(false);
+
+        hamburger_main.setClickable(false);
+        hamburger_main.setEnabled(false);
+
+        slideMenu.setClickable(false);
+        slideMenu.setEnabled(false);
+
+        openBlogs.setClickable(false);
+        openBlogs.setEnabled(false);
+
+        openOffers.setClickable(false);
+        openOffers.setEnabled(false);
+
+        openInformation.setClickable(false);
+        openInformation.setEnabled(false);
+
+        openSettings.setClickable(false);
+        openSettings.setEnabled(false);
+
+
     }
 
 
+    public void closeFragment(View v)
+    {
+        prefs.edit().putBoolean("notification",showNotifications).apply();
+        fragmentShown=false;
+        AlphaAnimation animation1 = new AlphaAnimation(0.3f, 1f);
+        animation1.setDuration(500);
+        animation1.setFillAfter(true);
+        mSlidingPanel.startAnimation(animation1);
+
+        mSlidingPanel.setEnabled(true);
+        mSlidingPanel.setClickable(true);
+
+        hamburger_main.setClickable(true);
+        hamburger_main.setEnabled(true);
+
+        slideMenu.setClickable(true);
+        slideMenu.setEnabled(true);
+
+        openBlogs.setClickable(true);
+        openBlogs.setEnabled(true);
+
+        openOffers.setClickable(true);
+        openOffers.setEnabled(true);
+
+        openInformation.setClickable(true);
+        openInformation.setEnabled(true);
+
+        openSettings.setClickable(true);
+        openSettings.setEnabled(true);
+
+       hamburger_main.performClick();
+        onBackPressed();
+    }
 
 
 
