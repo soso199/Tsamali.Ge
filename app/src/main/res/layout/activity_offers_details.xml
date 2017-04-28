@@ -98,6 +98,7 @@
                 <ImageView
                     android:layout_width="fill_parent"
                     android:adjustViewBounds="true"
+                    android:id="@+id/image_cover_offer"
                     android:src="@drawable/empty"
                     android:layout_height="wrap_content" />
                 <ImageView

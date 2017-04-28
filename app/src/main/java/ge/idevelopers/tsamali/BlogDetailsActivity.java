@@ -18,6 +18,7 @@ import android.text.Html;
 import android.text.Spannable;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
+import android.text.method.ScrollingMovementMethod;
 import android.text.style.ImageSpan;
 import android.text.style.URLSpan;
 import android.util.DisplayMetrics;
@@ -36,6 +37,7 @@ import com.squareup.picasso.Picasso;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -43,6 +45,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 import ge.idevelopers.tsamali.adapters.BlogsAdapter;
 import ge.idevelopers.tsamali.adapters.OtherBlogsAdapter;
@@ -55,12 +59,15 @@ public class BlogDetailsActivity extends AppCompatActivity {
     private TextView text;
     private ImageView image;
     private ImageView fbShare;
+    private ImageView imageBack;
     private TextView otherArticlesTet;
     private RecyclerView recyclerView;
     private OtherBlogsAdapter blogsAdapter;
     private List<BlogsModel> threeBlogsList;
 
     public Tracker mTracker;
+    private  Handler mHandler;
+    String source;
 
 
     @Override
@@ -75,6 +82,7 @@ public class BlogDetailsActivity extends AppCompatActivity {
             final String link=extras.getString("link");
 
 
+
         AnalyticsApplication application = (AnalyticsApplication) getApplication();
         mTracker = application.getDefaultTracker();
 
@@ -87,7 +95,7 @@ public class BlogDetailsActivity extends AppCompatActivity {
                 .setAction("Share")
                 .build());
 
-
+        imageBack=(ImageView) findViewById(R.id.image_cover);
         text=(TextView)findViewById(R.id.main_text);
         title=(TextView)findViewById(R.id.title_text);
         image=(ImageView)findViewById(R.id.details_image);
@@ -102,8 +110,38 @@ public class BlogDetailsActivity extends AppCompatActivity {
         otherArticlesTet.setTypeface(forTitles);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        text.setText(Html.fromHtml(text_string,getImageHTML(),null));
 
+       // StrictMode.setThreadPolicy(policy);
+        title.setText(title_string);
+        Picasso.with(getApplicationContext()).load(url).into(image);
+
+
+        text.setText(Html.fromHtml(text_string));
+        final Spanned[] span = new Spanned[1];
+        AsyncTask task = new AsyncTask () {
+         @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+             text.setMovementMethod(ScrollingMovementMethod
+                     .getInstance());
+             if(span != null) {
+                 text.setText(span[0]);
+             }
+}
+
+            @Override
+            protected String doInBackground(Object[] params) {
+                span[0] =Html.fromHtml(text_string,getImageHTML(),null);
+                return null;
+            }
+        };
+
+        task.execute();
+
+
+
+
+      //  text.setText(Html.fromHtml(text_string,getImageHTML(),null));
         text.setMovementMethod(LinkMovementMethod.getInstance());
 
 
@@ -114,9 +152,6 @@ public class BlogDetailsActivity extends AppCompatActivity {
 //                return null;
 //            }
 //        }, null));
-        title.setText(title_string);
-        Picasso.with(getApplicationContext()).load(url).into(image);
-
 
 
         /// 3 other article
@@ -173,7 +208,8 @@ public class BlogDetailsActivity extends AppCompatActivity {
             public Drawable getDrawable(String source) {
                 try {
                     Drawable drawable = Drawable.createFromStream(new URL(source).openStream(), "src name");
-                    drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),drawable.getIntrinsicHeight());
+                    drawable.setBounds(0, 0, imageBack.getWidth(),imageBack.getHeight());
+
                     return drawable;
                 } catch(IOException exception) {
                     Log.v("IOException",exception.getMessage());
@@ -184,12 +220,14 @@ public class BlogDetailsActivity extends AppCompatActivity {
         return imageGetter;
     }
 
-
-
+    private Drawable fetch(String urlString) throws MalformedURLException, IOException {
+        return new BitmapDrawable(getApplicationContext().getResources(), Picasso.with(getApplicationContext()).load(urlString).get());
+    }
     public void back(View v)
     {
         super.onBackPressed();
     }
+
 
 
 }
