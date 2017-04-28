@@ -39,6 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:onClick="cell"
                 android:layout_margin="10dp"
 
                 >
@@ -65,6 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:onClick="cellMobile"
                 android:layout_margin="10dp"
                 >
 
@@ -91,6 +93,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:onClick="sendMail"
                 android:layout_margin="10dp"
                 >
 
@@ -114,29 +117,40 @@
                     android:id="@+id/mail"
                     />
             </LinearLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:orientation="horizontal"
                 android:gravity="center"
                 >
+
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:src="@drawable/facebooklogo"
+                    android:onClick="openFacebook"
                     android:layout_margin="5dp"
                     />
                 <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:onClick="openYoutube"
                     android:src="@drawable/youtubelogo"
                     android:layout_margin="5dp"
                     />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                >
+
                 <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:onClick="openMyvideo"
                     android:src="@drawable/my_video_logo"
                     android:layout_margin="5dp"
                     />

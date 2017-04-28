@@ -339,7 +339,7 @@ public class OffersDetails extends AppCompatActivity {
     }
     public String generateDate(String date)
     {
-        String month=date.substring(0,1);
+        String month=date.substring(0,2);
 
         switch (month)
         {
@@ -382,7 +382,7 @@ public class OffersDetails extends AppCompatActivity {
 
 
         }
-        date=date.substring(3,4)+" "+month+" "+date.substring(6,7);
+        date=date.substring(3,5)+" "+month+" 20"+date.substring(6,8);
 
         return date;
 

@@ -1,13 +1,18 @@
 package ge.idevelopers.tsamali;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SlidingPaneLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.widget.SlidingPaneLayout.PanelSlideListener;
 import android.support.v4.app.Fragment;
@@ -22,6 +27,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -42,9 +48,9 @@ import ge.idevelopers.tsamali.fragments.SettingsFragment;
 import ge.idevelopers.tsamali.tabs.Blog;
 import ge.idevelopers.tsamali.tabs.Offers;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG ="shevida" ;
+    private static final String TAG = "shevida";
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -62,12 +68,12 @@ public class MainActivity extends AppCompatActivity{
     SlidingPaneLayout mSlidingPanel;
     ImageView appImage;
     private TextView TitleText;
-    private   SharedPreferences prefs = null;
+    private SharedPreferences prefs = null;
     private TextView blog;
     private TextView aqciebi;
     private TextView contact;
     private TextView settings;
-    private Boolean open=true;
+    private Boolean open = true;
     private Typeface typeface;
     private TabLayout tabLayout;
     private Animation fadein;
@@ -84,10 +90,10 @@ public class MainActivity extends AppCompatActivity{
     private RelativeLayout hamburger_main;
     private RelativeLayout all;
     private RelativeLayout cover;
-    public static boolean isSlidable=true;
-    public static int dialog=0;
+    public static boolean isSlidable = true;
+    public static int dialog = 0;
     public static boolean showNotifications;
-    public  static boolean fragmentShown=false;
+    public static boolean fragmentShown = false;
     private SettingsFragment settFragment;
     private InformationFragment infFragment;
     private View v;
@@ -101,27 +107,15 @@ public class MainActivity extends AppCompatActivity{
     private FirebaseAnalytics mFirebaseAnalytics;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         prefs = getSharedPreferences("ge.idevelopers.tsamali", MODE_PRIVATE);
-        showNotifications=prefs.getBoolean("notification",true);
+        showNotifications = prefs.getBoolean("notification", true);
 
         setContentView(R.layout.activity_main);
-//        AnalyticsApplication application = (AnalyticsApplication) getApplication();
-//
-//       mTracker = application.getDefaultTracker();
-//
-//
-//        mTracker.setScreenName("Image~" + "ss");
-//        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-//
-//        mTracker.send(new HitBuilders.EventBuilder()
-//                .setCategory("Action")
-//                .setAction("Share")
-//                .build());
+
         AnalyticsApplication application = (AnalyticsApplication) getApplication();
         mTracker = application.getDefaultTracker();
 
@@ -134,44 +128,43 @@ public class MainActivity extends AppCompatActivity{
                 .setAction("Share")
                 .build());
 
-        blog=(TextView)findViewById(R.id.blog_text);
-        aqciebi=(TextView)findViewById(R.id.aqciebi_text);
-        contact=(TextView)findViewById(R.id.contact_text);
-        settings=(TextView)findViewById(R.id.settings_text);
+        blog = (TextView) findViewById(R.id.blog_text);
+        aqciebi = (TextView) findViewById(R.id.aqciebi_text);
+        contact = (TextView) findViewById(R.id.contact_text);
+        settings = (TextView) findViewById(R.id.settings_text);
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        typeface=Typeface.createFromAsset(getAssets(), "fonts/alkroundedmtav-medium.otf");
+        typeface = Typeface.createFromAsset(getAssets(), "fonts/alkroundedmtav-medium.otf");
+
 
         blog.setTypeface(typeface);
         aqciebi.setTypeface(typeface);
         contact.setTypeface(typeface);
         settings.setTypeface(typeface);
 
-        settFragment=new SettingsFragment();
+        settFragment = new SettingsFragment();
 
-        infFragment=new InformationFragment();
+        infFragment = new InformationFragment();
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        Color color=new Color();
+        Color color = new Color();
         color.parseColor("#000000");
-
-
 
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-       // tabLayout.setTabTextColors(R.color.black,R.color.black);
+        // tabLayout.setTabTextColors(R.color.black,R.color.black);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                switch (tab.getPosition()){
+                switch (tab.getPosition()) {
                     case 0:
-                        isSlidable=true;
-                    break;
+                        isSlidable = true;
+                        break;
                     case 1:
-                        isSlidable=false;
+                        isSlidable = false;
                 }
             }
 
@@ -190,32 +183,30 @@ public class MainActivity extends AppCompatActivity{
         appImage = (ImageView) findViewById(android.R.id.home);
         TitleText = (TextView) findViewById(android.R.id.title);
 
-        slideMenu=(LinearLayout) findViewById(R.id.slideMenu);
-        openBlogs=(LinearLayout) findViewById(R.id.open_blog);
-        openOffers=(LinearLayout) findViewById(R.id.open_offers);
-        openInformation=(LinearLayout) findViewById(R.id.open_information);
-        openSettings=(LinearLayout) findViewById(R.id.open_settings);
+        slideMenu = (LinearLayout) findViewById(R.id.slideMenu);
+        openBlogs = (LinearLayout) findViewById(R.id.open_blog);
+        openOffers = (LinearLayout) findViewById(R.id.open_offers);
+        openInformation = (LinearLayout) findViewById(R.id.open_information);
+        openSettings = (LinearLayout) findViewById(R.id.open_settings);
 
-        all=(RelativeLayout)findViewById(R.id.all);
+        all = (RelativeLayout) findViewById(R.id.all);
         mSlidingPanel = (SlidingPaneLayout) findViewById(R.id.main_content);
-       mSlidingPanel.setPanelSlideListener(mPanelListener);
+        mSlidingPanel.setPanelSlideListener(mPanelListener);
         mSlidingPanel.setParallaxDistance(180);
 
-        all.setOnTouchListener(new OnSwipeTouchListener(){
-            @Override
-            public void onSwipeRight() {
-                mSlidingPanel.openPane();
-                super.onSwipeRight();
-            }
+        all.setOnTouchListener(new OnSwipeTouchListener() {
+                                   @Override
+                                   public void onSwipeRight() {
+                                       mSlidingPanel.openPane();
+                                       super.onSwipeRight();
+                                   }
 
-            @Override
-            public void onSwipeLeft() {
-                super.onSwipeLeft();
-            }
-        }
+                                   @Override
+                                   public void onSwipeLeft() {
+                                       super.onSwipeLeft();
+                                   }
+                               }
         );
-
-
 
 
         //animation
@@ -224,8 +215,8 @@ public class MainActivity extends AppCompatActivity{
         humburger_21 = (LinearLayout) findViewById(R.id.humburger_24);
         humburger_31 = (LinearLayout) findViewById(R.id.humburger_34);
         humburger_41 = (LinearLayout) findViewById(R.id.humburger_44);
-        hamburger_main=(RelativeLayout)findViewById(R.id.humburger_main4);
-        cover=(RelativeLayout)findViewById(R.id.cover);
+        hamburger_main = (RelativeLayout) findViewById(R.id.humburger_main4);
+        cover = (RelativeLayout) findViewById(R.id.cover);
 
         test = AnimationUtils.loadAnimation(this, R.anim.test);
         animation_first = AnimationUtils.loadAnimation(this, R.anim.rotate);
@@ -237,7 +228,7 @@ public class MainActivity extends AppCompatActivity{
         hamburger_main.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(open) {
+                if (open) {
                     humburger_41.startAnimation(test);
                     humburger_31.startAnimation(test);
                     humburger_11.startAnimation(animation_first);
@@ -245,9 +236,8 @@ public class MainActivity extends AppCompatActivity{
 
                     mSlidingPanel.openPane();
                     cover.setVisibility(View.VISIBLE);
-                    open=false;
-                }
-                else {
+                    open = false;
+                } else {
                     humburger_41.startAnimation(fadein);
                     humburger_31.startAnimation(fadein);
                     humburger_11.startAnimation(rotateback);
@@ -255,14 +245,10 @@ public class MainActivity extends AppCompatActivity{
 
                     mSlidingPanel.closePane();
                     cover.setVisibility(View.GONE);
-                    open=true;
+                    open = true;
                 }
             }
         });
-
-
-
-
 
 
         changeTabsFont();
@@ -271,9 +257,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-
-
-    PanelSlideListener mPanelListener=new PanelSlideListener() {
+    PanelSlideListener mPanelListener = new PanelSlideListener() {
         @Override
         public void onPanelSlide(View panel, float slideOffset) {
 //            over.setVisibility(View.VISIBLE);
@@ -284,9 +268,9 @@ public class MainActivity extends AppCompatActivity{
         @Override
         public void onPanelOpened(View panel) {
 
-            LinearLayout tabStrip = ((LinearLayout)tabLayout.getChildAt(0));
+            LinearLayout tabStrip = ((LinearLayout) tabLayout.getChildAt(0));
             tabStrip.setEnabled(false);
-            for(int i = 0; i < tabStrip.getChildCount(); i++) {
+            for (int i = 0; i < tabStrip.getChildCount(); i++) {
                 tabStrip.getChildAt(i).setClickable(false);
             }
             mViewPager.setActivated(false);
@@ -298,9 +282,9 @@ public class MainActivity extends AppCompatActivity{
 
         @Override
         public void onPanelClosed(View panel) {
-            LinearLayout tabStrip = ((LinearLayout)tabLayout.getChildAt(0));
+            LinearLayout tabStrip = ((LinearLayout) tabLayout.getChildAt(0));
             tabStrip.setEnabled(true);
-            for(int i = 0; i < tabStrip.getChildCount(); i++) {
+            for (int i = 0; i < tabStrip.getChildCount(); i++) {
                 tabStrip.getChildAt(i).setClickable(true);
             }
         }
@@ -317,8 +301,6 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-
-
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -332,15 +314,14 @@ public class MainActivity extends AppCompatActivity{
         @Override
         public Fragment getItem(int position) {
 
-            switch (position)
-            {
+            switch (position) {
                 case 0:
-                     Blog blog =new Blog();
+                    Blog blog = new Blog();
                     return blog;
 
 
                 case 1:
-                    Offers offers =new Offers();
+                    Offers offers = new Offers();
                     return offers;
                 default:
                     return null;
@@ -371,7 +352,7 @@ public class MainActivity extends AppCompatActivity{
         if (fragmentShown)
             closeFragment(v);
         else
-        super.onBackPressed();
+            super.onBackPressed();
     }
 
     private void changeTabsFont() {
@@ -391,80 +372,218 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-
-   public void onClick(View v)
-    {
+    public void onClick(View v) {
 
 
     }
+
     ///sending mail
-    public void sendMail(View v)
-    {
-        Intent i = new Intent(Intent.ACTION_SENDTO);
-        i.setType("message/rfc822");
-        i.setData(Uri.parse("mailto:"));
-        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"info@tsamali"});
-        try {
-            startActivity(Intent.createChooser(i, "Send mail..."));
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(v.getContext(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-        }
-    }
+    public void sendMail(View v) {
+
+        new AlertDialog.Builder(this)
+                .setMessage("ნამდვილად გსურთ მეილის გაგზავნა?")
+                .setPositiveButton("კი", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent i = new Intent(Intent.ACTION_SENDTO);
+                        i.setType("message/rfc822");
+                        i.setData(Uri.parse("mailto:"));
+                        i.putExtra(Intent.EXTRA_EMAIL, new String[]{"info@tsamali"});
+                        try {
+                            startActivity(Intent.createChooser(i, "Send mail..."));
+                        } catch (android.content.ActivityNotFoundException ex) {
+                            Toast.makeText(getBaseContext(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .setNegativeButton("არა", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        }
+                )
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setCancelable(false)
+                .show();
 
 
-    public void openFacebook(View v)
-    {
-
-
-        FacebookSdk.sdkInitialize(getApplicationContext());
-
-        ShareLinkContent linkContent;
-
-        ShareDialog shareDialog = new ShareDialog(this);
-        if (ShareDialog.canShow(ShareLinkContent.class)) {
-            linkContent = new ShareLinkContent.Builder()
-                    .setContentUrl(Uri.parse("http://tsamali.ge/aqcia/sarelaqsacio-samkurnalo-an-sxeulis-sakoreqcio-masazhi"))
-                    .build();
-            shareDialog.show(linkContent);
-        }
-
-
-    }
-
-    public void openYoutube(View v)
-    {
-
-
-        FacebookSdk.sdkInitialize(getApplicationContext());
-
-        ShareLinkContent linkContent;
-
-        ShareDialog shareDialog = new ShareDialog(this);
-        if (ShareDialog.canShow(ShareLinkContent.class)) {
-            linkContent = new ShareLinkContent.Builder()
-                    .setContentUrl(Uri.parse("http://tsamali.ge/aqcia/sarelaqsacio-samkurnalo-an-sxeulis-sakoreqcio-masazhi"))
-                    .build();
-            shareDialog.show(linkContent);
-        }
 
 
     }
 
-    public void cell(View v)
-    {
+
+    public void openFacebook(View v) {
+
+        new AlertDialog.Builder(this)
+                .setMessage("ნამდვილად გსურთ Facebook-ზე გადასვლა?")
+                .setPositiveButton("კი", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/Tsamali.GE/"));
+                            startActivity(intent);
+                        } catch(Exception e) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com")));
+                        }
+                    }
+                })
+                .setNegativeButton("არა", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        }
+                )
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setCancelable(false)
+                .show();
 
 
-        FacebookSdk.sdkInitialize(getApplicationContext());
 
-        ShareLinkContent linkContent;
 
-        ShareDialog shareDialog = new ShareDialog(this);
-        if (ShareDialog.canShow(ShareLinkContent.class)) {
-            linkContent = new ShareLinkContent.Builder()
-                    .setContentUrl(Uri.parse("http://tsamali.ge/aqcia/sarelaqsacio-samkurnalo-an-sxeulis-sakoreqcio-masazhi"))
-                    .build();
-            shareDialog.show(linkContent);
+    }
+
+    public void openMyvideo(View v) {
+
+
+        new AlertDialog.Builder(this)
+                .setMessage("ნამდვილად გსურთ Myvideo.ge-ზე გადასვლა?")
+                .setPositiveButton("კი", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent=new Intent(Intent.ACTION_VIEW);
+                            intent.setData(Uri.parse("http://www.myvideo.ge/tsamaliGE"));
+                            startActivity(intent);
+
+                    }
+                })
+                .setNegativeButton("არა", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        }
+                )
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setCancelable(false)
+                .show();
+
+
+
+
+    }
+
+    public void openYoutube(View v) {
+
+
+        new AlertDialog.Builder(this)
+                .setMessage("ნამდვილად გსურთ YouTube-ზე გადასვლა?")
+                .setPositiveButton("კი", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+          Intent intent=null;
+                        try {
+                            intent =new Intent(Intent.ACTION_VIEW);
+                            intent.setPackage("com.google.android.youtube");
+                            intent.setData(Uri.parse("https://www.youtube.com/channel/UCJBcsXMkGopENY-VSo1OwTg"));
+                            startActivity(intent);
+                        } catch (ActivityNotFoundException e) {
+                            intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setData(Uri.parse("https://www.youtube.com/channel/UCJBcsXMkGopENY-VSo1OwTg"));
+                            startActivity(intent);
+                        }
+                    }
+                })
+                .setNegativeButton("არა", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        }
+                )
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setCancelable(false)
+                .show();
+
+
+
+
+    }
+    public void cell(View v) {
+
+        if (ActivityCompat.checkSelfPermission(getBaseContext(), android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{android.Manifest.permission.CALL_PHONE},
+                    1);
         }
+
+        new AlertDialog.Builder(this)
+                .setMessage("ნამდვილად გსურთ დარეკვა?")
+                .setPositiveButton("კი", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Intent intent = new Intent(Intent.ACTION_CALL);
+                        intent.setData(Uri.parse("tel:0322180181"));
+                        if (ActivityCompat.checkSelfPermission(getBaseContext(), android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+
+                            ActivityCompat.requestPermissions(MainActivity.this,
+                                    new String[]{android.Manifest.permission.CALL_PHONE},
+                                    1);
+
+                            } else
+                            startActivity(intent);
+                    }
+                })
+                .setNegativeButton("არა", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        }
+                )
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setCancelable(false)
+                .show();
+
+    }
+
+
+
+
+    public void cellMobile(View v) {
+
+
+
+        if (ActivityCompat.checkSelfPermission(getBaseContext(), android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{android.Manifest.permission.CALL_PHONE},
+                    1);
+        }
+
+        new AlertDialog.Builder(this)
+                .setMessage("ნამდვილად გსურთ დარეკვა?")
+                .setPositiveButton("კი", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Intent intent = new Intent(Intent.ACTION_CALL);
+                        intent.setData(Uri.parse("tel:+995599181192"));
+                        if (ActivityCompat.checkSelfPermission(getBaseContext(), android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+
+                            ActivityCompat.requestPermissions(MainActivity.this,
+                                    new String[]{android.Manifest.permission.CALL_PHONE},
+                                    1);
+
+                        } else
+                            startActivity(intent);
+                    }
+                })
+                .setNegativeButton("არა", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        }
+                )
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setCancelable(false)
+                .show();
 
 
     }

@@ -43,9 +43,7 @@ public class SettingsFragment extends Fragment {
 
       //  Typeface typeface= Typeface.createFromAsset(this.getAssets(), "fonts/bpg_glaho.ttf");
 
-        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/bpg_glaho.ttf");
-        text.setTypeface(typeface);
-        save.setTypeface(typeface);
+
 
         if(MainActivity.showNotifications)
             mSwitch.setChecked(true);

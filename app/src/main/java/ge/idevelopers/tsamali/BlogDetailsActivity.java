@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LevelListDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -20,6 +21,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ImageSpan;
 import android.text.style.URLSpan;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -99,8 +101,8 @@ public class BlogDetailsActivity extends AppCompatActivity {
         text.setTypeface(forText);
         otherArticlesTet.setTypeface(forTitles);
 
-
-        text.setText(Html.fromHtml(text_string));
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        text.setText(Html.fromHtml(text_string,getImageHTML(),null));
 
         text.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -165,6 +167,21 @@ public class BlogDetailsActivity extends AppCompatActivity {
             }
         });
 
+    }
+    public Html.ImageGetter getImageHTML() {
+        Html.ImageGetter imageGetter = new Html.ImageGetter() {
+            public Drawable getDrawable(String source) {
+                try {
+                    Drawable drawable = Drawable.createFromStream(new URL(source).openStream(), "src name");
+                    drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),drawable.getIntrinsicHeight());
+                    return drawable;
+                } catch(IOException exception) {
+                    Log.v("IOException",exception.getMessage());
+                    return null;
+                }
+            }
+        };
+        return imageGetter;
     }
 
 
