@@ -102,8 +102,9 @@ public class Offers extends Fragment {
                                 String text = blogObject.getString("text");
                                 int views = blogObject.getInt("views");
                                 String link=blogObject.getString("link");
+                                int id=blogObject.getInt("id");
 
-                                OffersModel offersModel= new OffersModel(title, img, text, views,link);
+                                OffersModel offersModel= new OffersModel(title, img, text, views,link,id);
                                 offersList.add(offersModel);
 
                             } catch (JSONException e) {

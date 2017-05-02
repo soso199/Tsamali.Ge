@@ -54,6 +54,7 @@ public class OffersAdapter extends  RecyclerView.Adapter<OffersAdapter.ViewHolde
         final String text=model.getText();
         final String url="http://tsamali.ge/"+model.getImg();
         final String link=model.getLink();
+        final int id=model.getId();
         holder.text.setText(title);
         Typeface typeface= Typeface.createFromAsset(context.getAssets(), "fonts/alkroundedmtav-medium.otf");
         holder.text.setTypeface(typeface);
@@ -68,6 +69,7 @@ public class OffersAdapter extends  RecyclerView.Adapter<OffersAdapter.ViewHolde
                 intent.putExtra("url",url);
                 intent.putExtra("text",text);
                 intent.putExtra("link",link);
+                intent.putExtra("id",id);
                 context.startActivity(intent);
             }
         });

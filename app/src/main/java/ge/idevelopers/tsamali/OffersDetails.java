@@ -2,10 +2,15 @@ package ge.idevelopers.tsamali;
 
 import android.app.DatePickerDialog;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.Spanned;
+import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -44,6 +49,8 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -70,8 +77,10 @@ public class OffersDetails extends AppCompatActivity {
     private EditText enter_comment;
     private boolean send_butt;
     private boolean is_form_open=false;
+    private ImageView back;
     private  Calendar myCalendar;
     public Tracker mTracker;
+    private ImageView cover;
 
 
     @Override
@@ -82,9 +91,10 @@ public class OffersDetails extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         String title_string = extras.getString("title");
         String url = extras.getString("url");
-        String text_string = extras.getString("text");
+        final String text_string = extras.getString("text");
         final String link=extras.getString("link");
 
+        final int id=extras.getInt("id");
 
 
         AnalyticsApplication application = (AnalyticsApplication) getApplication();
@@ -109,6 +119,8 @@ public class OffersDetails extends AppCompatActivity {
         enter_date=(EditText)findViewById(R.id.enter_date);
         enter_comment=(EditText)findViewById(R.id.enter_comment);
 
+        back=(ImageView)findViewById(R.id.back_offers);
+
         cancel=(ImageView)findViewById(R.id.cancel);
         send=(Button)findViewById(R.id.send);
         send2=(Button)findViewById(R.id.send2);
@@ -117,6 +129,7 @@ public class OffersDetails extends AppCompatActivity {
         scrollView=(ScrollView)findViewById(R.id.textAreaScroller);
 
 
+        cover=(ImageView)findViewById(R.id.image_cover_offer);
 
         Typeface forTitles = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/alkroundedmtav-medium.otf");
         Typeface forText = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/bpg_glaho.ttf");
@@ -132,12 +145,34 @@ public class OffersDetails extends AppCompatActivity {
         enter_date.setTypeface(forTitles);
         enter_comment.setTypeface(forTitles);
 
-        text.setText(Html.fromHtml(text_string));
         title.setText(title_string);
         Picasso.with(getApplicationContext()).load(url).into(image);
 
+        text.setText(Html.fromHtml(text_string));
+        final Spanned[] span = new Spanned[1];
+        AsyncTask task = new AsyncTask () {
+            @Override
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
+                text.setMovementMethod(ScrollingMovementMethod
+                        .getInstance());
+                if(span != null) {
+                    text.setText(span[0]);
+                }
+            }
 
-       myCalendar = Calendar.getInstance();
+            @Override
+            protected String doInBackground(Object[] params) {
+                span[0] =Html.fromHtml(text_string,getImageHTML(),null);
+                return null;
+            }
+        };
+
+        task.execute();
+
+
+
+        myCalendar = Calendar.getInstance();
 
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
@@ -164,6 +199,13 @@ public class OffersDetails extends AppCompatActivity {
             }
         });
 
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                OffersDetails.super.onBackPressed();
+            }
+        });
 
 
 
@@ -198,7 +240,7 @@ public class OffersDetails extends AppCompatActivity {
 
 
                         try {
-                            sendRespond(name,number,date,comment);
+                            sendRespond(name,number,date,comment,id);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -284,7 +326,7 @@ public class OffersDetails extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    private void sendRespond(final String name,final String number,final String date,final String comment) throws JSONException {
+    private void sendRespond(final String name,final String number,final String date,final String comment,final int id) throws JSONException {
         final String URL = "http://tsamali.ge/api/ard/index.php";
 // Post params to be sent to the server
 
@@ -317,7 +359,7 @@ public class OffersDetails extends AppCompatActivity {
                 params.put("date", date);
                 params.put("comment", comment);
                 params.put("type", "აქციის დაჯავშნა");
-
+                params.put("ID", String.valueOf(id));
                 return params;
             }
         };
@@ -388,5 +430,20 @@ public class OffersDetails extends AppCompatActivity {
 
 
     }
+    public Html.ImageGetter getImageHTML() {
+        Html.ImageGetter imageGetter = new Html.ImageGetter() {
+            public Drawable getDrawable(String source) {
+                try {
+                    Drawable drawable = Drawable.createFromStream(new URL(source).openStream(), "src name");
+                    drawable.setBounds(0, 0, cover.getWidth(),cover.getHeight());
 
+                    return drawable;
+                } catch(IOException exception) {
+                    Log.v("IOException",exception.getMessage());
+                    return null;
+                }
+            }
+        };
+        return imageGetter;
+    }
 }

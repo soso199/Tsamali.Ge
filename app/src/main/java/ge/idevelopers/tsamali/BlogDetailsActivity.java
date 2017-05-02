@@ -64,6 +64,7 @@ public class BlogDetailsActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private OtherBlogsAdapter blogsAdapter;
     private List<BlogsModel> threeBlogsList;
+    private ImageView back;
 
     public Tracker mTracker;
     private  Handler mHandler;
@@ -101,6 +102,8 @@ public class BlogDetailsActivity extends AppCompatActivity {
         image=(ImageView)findViewById(R.id.details_image);
         fbShare=(ImageView) findViewById(R.id.fbShare_blog);
         otherArticlesTet=(TextView)findViewById(R.id.other_articles_text);
+
+        back=(ImageView)findViewById(R.id.blog_back);
 
         Typeface forTitles= Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/alkroundedmtav-medium.otf");
         Typeface forText= Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/bpg_glaho.ttf");
@@ -181,6 +184,15 @@ public class BlogDetailsActivity extends AppCompatActivity {
 
         blogsAdapter.notifyDataSetChanged();
 
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                BlogDetailsActivity.super.onBackPressed();
+            }
+        });
+
+
         /////fb shearing
         fbShare.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,13 +232,6 @@ public class BlogDetailsActivity extends AppCompatActivity {
         return imageGetter;
     }
 
-    private Drawable fetch(String urlString) throws MalformedURLException, IOException {
-        return new BitmapDrawable(getApplicationContext().getResources(), Picasso.with(getApplicationContext()).load(urlString).get());
-    }
-    public void back(View v)
-    {
-        super.onBackPressed();
-    }
 
 
 

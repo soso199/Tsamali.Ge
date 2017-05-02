@@ -10,13 +10,15 @@ public class OffersModel {
     private String text;
     private String link;
     private int views;
+    private int id;
 
-    public OffersModel(String title, String img, String text, int views,String link) {
+    public OffersModel(String title, String img, String text, int views,String link,int id) {
         this.title = title;
         this.img = img;
         this.text = text;
         this.views = views;
         this.link=link;
+        this.id=id;
     }
 
     public String getTitle() {
@@ -57,5 +59,13 @@ public class OffersModel {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
