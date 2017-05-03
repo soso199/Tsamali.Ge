@@ -42,6 +42,7 @@ import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import ge.idevelopers.tsamali.fragments.InformationFragment;
 import ge.idevelopers.tsamali.fragments.SettingsFragment;
@@ -102,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout openOffers;
     private LinearLayout openInformation;
     private LinearLayout openSettings;
+    private boolean is_first=false;
 
     public Tracker mTracker;
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -113,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         prefs = getSharedPreferences("ge.idevelopers.tsamali", MODE_PRIVATE);
         showNotifications = prefs.getBoolean("notification", true);
+
 
         setContentView(R.layout.activity_main);
 
@@ -155,7 +158,6 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-        // tabLayout.setTabTextColors(R.color.black,R.color.black);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -345,6 +347,17 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+
+        super.onResume();
+
+        if (prefs.getBoolean("firstrun", true)) {
+            FirebaseMessaging.getInstance().subscribeToTopic("tsamali");
+            prefs.edit().putBoolean("firstrun",false).apply();
+        }
     }
 
     @Override
@@ -678,7 +691,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void closeFragment(View v)
     {
-        prefs.edit().putBoolean("notification",showNotifications).apply();
         fragmentShown=false;
         AlphaAnimation animation1 = new AlphaAnimation(0.3f, 1f);
         animation1.setDuration(500);
@@ -707,6 +719,44 @@ public class MainActivity extends AppCompatActivity {
         openSettings.setEnabled(true);
 
        hamburger_main.performClick();
+        onBackPressed();
+    }
+    public void closeSettingsFragment(View v)
+    {
+        if(MainActivity.showNotifications)
+            FirebaseMessaging.getInstance().subscribeToTopic("tsamali");
+        else
+            FirebaseMessaging.getInstance().unsubscribeFromTopic("tsamali");
+
+        prefs.edit().putBoolean("notification",showNotifications).apply();
+        fragmentShown=false;
+        AlphaAnimation animation1 = new AlphaAnimation(0.3f, 1f);
+        animation1.setDuration(500);
+        animation1.setFillAfter(true);
+        mSlidingPanel.startAnimation(animation1);
+
+        mSlidingPanel.setEnabled(true);
+        mSlidingPanel.setClickable(true);
+
+        hamburger_main.setClickable(true);
+        hamburger_main.setEnabled(true);
+
+        slideMenu.setClickable(true);
+        slideMenu.setEnabled(true);
+
+        openBlogs.setClickable(true);
+        openBlogs.setEnabled(true);
+
+        openOffers.setClickable(true);
+        openOffers.setEnabled(true);
+
+        openInformation.setClickable(true);
+        openInformation.setEnabled(true);
+
+        openSettings.setClickable(true);
+        openSettings.setEnabled(true);
+
+        hamburger_main.performClick();
         onBackPressed();
     }
 

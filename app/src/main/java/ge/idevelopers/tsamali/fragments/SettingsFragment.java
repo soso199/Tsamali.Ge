@@ -2,6 +2,7 @@ package ge.idevelopers.tsamali.fragments;
 
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -14,6 +15,9 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.RemoteMessage;
 
 import ge.idevelopers.tsamali.MainActivity;
 import ge.idevelopers.tsamali.R;
@@ -47,6 +51,7 @@ public class SettingsFragment extends Fragment {
 
         if(MainActivity.showNotifications)
             mSwitch.setChecked(true);
+
         else
             mSwitch.setChecked(false);
 
@@ -57,11 +62,13 @@ public class SettingsFragment extends Fragment {
                 if(!mSwitch.isChecked()){
                     MainActivity.showNotifications=false;
 
+
+
                 }
                 else {
                     MainActivity.showNotifications = true;
-
                 }
+
 
 
             }

@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="შენახვა"
-                android:onClick="closeFragment"
+                android:onClick="closeSettingsFragment"
                 android:id="@+id/save_settings"
                 android:background="@drawable/round_settings"
                 android:textColor="@color/black"

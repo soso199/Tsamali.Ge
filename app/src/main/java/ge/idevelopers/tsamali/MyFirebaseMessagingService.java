@@ -31,36 +31,41 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getNotification()!=null){
             Log.d(TAG,"Message Body: "+remoteMessage.getNotification().getBody());
 
-      if(MainActivity.showNotifications)
+
             sendNotification(remoteMessage.getNotification().getBody(),remoteMessage.getNotification().getTitle());
-        }
+       }
 
 
     }
+
 
 
 // *** display notification ***\\\\
     private void sendNotification(String body,String title) {
-        Intent mIntent=new Intent(this,MainActivity.class);
-        mIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        PendingIntent mPandingIntent=PendingIntent.getActivity(this,0,mIntent,PendingIntent.FLAG_ONE_SHOT);
+        if(MainActivity.showNotifications) {
+            Intent mIntent = new Intent(this, MainActivity.class);
+            mIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        Uri notificationSound= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            PendingIntent mPandingIntent = PendingIntent.getActivity(this, 0, mIntent, PendingIntent.FLAG_ONE_SHOT);
 
-        if(title.length()==0||title==null)
-            title="Tsamali.ge";
+            Uri notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-        android.support.v4.app.NotificationCompat.Builder mBuilder=new NotificationCompat.Builder(this)
-                .setContentTitle(title)
-                .setSmallIcon(R.drawable.tsamali_logo)
-                .setContentText(body)
-                .setAutoCancel(true)
-                .setSound(notificationSound)
-                .setContentIntent(mPandingIntent);
+            if (title.length() == 0 || title == null)
+                title = "Tsamali.ge";
 
-        NotificationManager mNotificationManager=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(0,mBuilder.build());
+            android.support.v4.app.NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                    .setContentTitle(title)
+                    .setSmallIcon(R.drawable.tsamali_logo)
+                    .setContentText(body)
+                    .setAutoCancel(true)
+                    .setSound(notificationSound)
+                    .setContentIntent(mPandingIntent);
+
+            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.notify(0, mBuilder.build());
+        }
 
     }
+
 }
