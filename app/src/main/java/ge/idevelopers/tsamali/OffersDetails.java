@@ -381,51 +381,51 @@ public class OffersDetails extends AppCompatActivity {
     }
     public String generateDate(String date)
     {
-        String month=date.substring(0,2);
+        if(!date.isEmpty()) {
+            String month = date.substring(0, 2);
 
-        switch (month)
-        {
-            case "01":
-                month="იანვარი";
-                        break;
-            case "02":
-                month="თებერვალი";
-                break;
-            case "03":
-                month="მარტი";
-                break;
-            case "04":
-                month="აპრილი";
-                break;
-            case "05":
-                month="მაისი";
-                break;
-            case "06":
-                month="ივნისი";
-                break;
-            case "07":
-                month="ივლისი";
-                break;
-            case "08":
-                month="აგვისტო";
-                break;
-            case "09":
-                month="სექტემბერი";
-                break;
-            case "10":
-                month="ოქტომბერი";
-                break;
-            case "11":
-                month="ნოემბერი";
-                break;
-            case "12":
-                month="დეკემბერი";
-                break;
+            switch (month) {
+                case "01":
+                    month = "იანვარი";
+                    break;
+                case "02":
+                    month = "თებერვალი";
+                    break;
+                case "03":
+                    month = "მარტი";
+                    break;
+                case "04":
+                    month = "აპრილი";
+                    break;
+                case "05":
+                    month = "მაისი";
+                    break;
+                case "06":
+                    month = "ივნისი";
+                    break;
+                case "07":
+                    month = "ივლისი";
+                    break;
+                case "08":
+                    month = "აგვისტო";
+                    break;
+                case "09":
+                    month = "სექტემბერი";
+                    break;
+                case "10":
+                    month = "ოქტომბერი";
+                    break;
+                case "11":
+                    month = "ნოემბერი";
+                    break;
+                case "12":
+                    month = "დეკემბერი";
+                    break;
 
 
+            }
+            date = date.substring(3, 5) + " " + month + " 20" + date.substring(6, 8);
         }
-        date=date.substring(3,5)+" "+month+" 20"+date.substring(6,8);
-
         return date;
 
 

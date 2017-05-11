@@ -103,10 +103,8 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout openOffers;
     private LinearLayout openInformation;
     private LinearLayout openSettings;
-    private boolean is_first=false;
 
     public Tracker mTracker;
-    private FirebaseAnalytics mFirebaseAnalytics;
 
 
     @Override

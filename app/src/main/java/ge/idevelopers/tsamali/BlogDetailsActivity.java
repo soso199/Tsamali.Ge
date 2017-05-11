@@ -47,6 +47,7 @@ public class BlogDetailsActivity extends AppCompatActivity {
     private List<BlogsModel> threeBlogsList;
     private ImageView back;
     public Tracker mTracker;
+    public ShareDialog shareDialog;
 
 
     @Override
@@ -160,7 +161,7 @@ public class BlogDetailsActivity extends AppCompatActivity {
 
                 ShareLinkContent linkContent;
 
-                ShareDialog shareDialog = new ShareDialog(BlogDetailsActivity.this);
+                shareDialog = new ShareDialog(BlogDetailsActivity.this);
                 if (ShareDialog.canShow(ShareLinkContent.class)) {
                     linkContent = new ShareLinkContent.Builder()
                             .setContentUrl(Uri.parse(link))
